@@ -477,7 +477,7 @@ def shipping():
                               '#E8EAE3'),
                   return_card('Worn socks', BLUE, 'Hygiene restriction',
                               'Worn socks can’t be returned for change of mind. Faulty goods are always covered.', '#E6EAF1')],
-                 3, 2, 1, 16),
+                 3, 3, 1, 16),  # tablets keep all three cards in one row
         ], g=16, _element_id='returns'),
     ], pad_top=SECTION_PAD, flex_gap=gap(40), _element_id='shipping')
 
