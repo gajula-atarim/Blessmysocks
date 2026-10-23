@@ -134,6 +134,10 @@ def boxed(children, width=1180, pad_top=0, pad_bottom=0, **s):
 
 
 def row(children, justify='space-between', align='center', g=12, wrap='wrap', **s):
+    # Child containers in a row size to their content (Elementor defaults them to 100% width).
+    for c in children:
+        if c['elType'] == 'container':
+            c['settings'].setdefault('width', custom('auto'))
     return con(children, flex_direction='row', flex_justify_content=justify, flex_align_items=align,
                flex_gap=gap(g), flex_wrap=wrap, **s)
 
@@ -277,7 +281,7 @@ def hero():
 
 
 def collection_card(eyebrow_text, accent, title, sub, hero_img, cat, items, price_from):
-    strip = con([widget('image-box', image=img(f), thumbnail_size='medium', title_text=name,
+    strip = con([widget('image-box', image=img(f), thumbnail_size='medium', title_text=name, description_text='',
                         link=link(product_url(slug)), title_size='span', text_align='center',
                         image_space=px(14), image_size=px(100, '%'), title_color=MUTED,
                         **typo('title', 11, '400'), _css_classes='bms-strip-item')
@@ -531,7 +535,7 @@ def home():
 
 def header(menu_id):
     brand = row([
-        widget('site-logo', site_logo_fallback='no', custom_image=img('logo-icon.png'), site_logo_size_size='full',
+        widget('site-logo', site_logo_fallback='yes', custom_image=img('logo-icon.png'), site_logo_size_size='full',
                align='left', width=px(34), width_mobile=px(30), link_to='default', space=px(100, '%'),
                _element_width='auto'),
         widget('hfe-site-title', heading_tag='span', heading_link='default', heading_text_align='left',
