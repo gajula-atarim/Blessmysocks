@@ -363,28 +363,22 @@ header#masthead {
 .elementor-lightbox .dialog-lightbox-close-button > * { display: none; }
 .elementor-lightbox .dialog-lightbox-close-button::before { content: '×'; line-height: 1; font-family: 'Jost', sans-serif; font-size: 18px; color: #FFFFFF; }
 
-/* ---------- Cart drawer ---------- */
+/* ---------- Cart drawer (opens and closes instantly, as in the design) ---------- */
 .bms-drawer { position: fixed; inset: 0; z-index: 9999; visibility: hidden; pointer-events: none; }
 .bms-drawer.is-open { visibility: visible; pointer-events: auto; }
 .bms-drawer__scrim {
 	position: absolute; inset: 0;
 	background: rgba(30,34,42,.32);
-	opacity: 0;
-	transition: opacity .3s ease;
 }
-.bms-drawer.is-open .bms-drawer__scrim { opacity: 1; }
 .bms-drawer__panel {
 	position: absolute; top: 0; right: 0;
 	width: min(420px, 100%);
 	height: 100%;
 	background: var(--bms-bg);
 	display: flex; flex-direction: column;
-	transform: translateX(100%);
-	transition: transform .35s cubic-bezier(.2,.7,.2,1);
 	font-family: 'Jost', sans-serif;
 	color: var(--bms-ink);
 }
-.bms-drawer.is-open .bms-drawer__panel { transform: translateX(0); }
 .bms-drawer__head {
 	display: flex; justify-content: space-between; align-items: center;
 	padding: 22px 24px;
