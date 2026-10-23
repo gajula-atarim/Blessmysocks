@@ -592,11 +592,14 @@ def footer(menus):
              heading('Christian socks, tees and gifts. Shipped from Australia.', 13, 'span', '400', '#C9CCD2', lh=1.6,
                      _element_width='initial', _element_custom_width=px(300), _element_width_tablet='inherit')],
             g=14, grid_column='custom', grid_column_custom='span 2', grid_column_custom_tablet='span 3',
-            grid_column_custom_mobile='span 2'),
+            grid_column_custom_mobile='span 3'),
         menu_col('SHOP', menus['shop']),
         menu_col('HELP', menus['help']),
         menu_col('COMPANY', menus['company']),
-    ], 5, 3, 2, 36, rg=36)
+    ], 5, 3, 'auto auto auto', 36, rg=36,
+        # Phones: Shop / Help / Company share one row, each column as wide as its links.
+        grid_justify_content_mobile='space-between',
+        grid_gaps_mobile={'unit': 'px', 'column': '16', 'row': '32', 'isLinked': False})
     bottom = row([
         widget('copyright', shortcode='© 2026 Bless My Socks® · Australia', align='left', title_color='#C9CCD2',
                **typo('caption', 12, '400')),
