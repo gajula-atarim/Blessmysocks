@@ -138,6 +138,7 @@ def row(children, justify='space-between', align='center', g=12, wrap='wrap', **
     for c in children:
         if c['elType'] == 'container':
             c['settings'].setdefault('width', custom('auto'))
+            c['settings'].setdefault('width_mobile', custom('auto'))  # Elementor forces 100% on phones otherwise
     return con(children, flex_direction='row', flex_justify_content=justify, flex_align_items=align,
                flex_gap=gap(g), flex_wrap=wrap, **s)
 
@@ -428,7 +429,7 @@ def step(num, title, text):
 def region_rows(region, rows):
     return col([row([heading(p, 14, 'span', '400', INK), heading(d + ' days', 14, 'span', '400', BLUE, _css_classes='bms-num')],
                     g=16, wrap='nowrap', padding=dims(14, 0), border_border='solid', border_width=dims(1, 0, 0, 0),
-                    border_color='#ECE9E4') for p, d in rows], css_classes='bms-region-' + region)
+                    border_color='#ECE9E4', css_classes='bms-region-row') for p, d in rows], css_classes='bms-region-' + region)
 
 
 def return_card(label, color, title, text, bg):
