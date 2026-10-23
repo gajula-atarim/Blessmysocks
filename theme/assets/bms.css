@@ -26,6 +26,7 @@ html.bms-lock { overflow: hidden; }
 [id="shop"], [id="about"], [id="shipping"], [id="returns"] { scroll-margin-top: 72px; }
 
 .elementor-widget-text-editor p:last-child { margin-bottom: 0; }
+.bms-nowrap .elementor-heading-title { white-space: nowrap; }
 .elementor-widget-heading .elementor-heading-title em { font-style: italic; color: inherit; }
 
 /* ---------- Keyframes ---------- */
@@ -390,7 +391,7 @@ header#masthead {
 	border-bottom: 1px solid var(--bms-line);
 }
 .bms-drawer__title { font-weight: 300; font-size: 24px; }
-.bms-drawer__close {
+.bms-drawer .bms-drawer__close {
 	width: 40px; height: 40px;
 	border-radius: 999px;
 	border: 1px solid #D9D5CE;
@@ -399,7 +400,7 @@ header#masthead {
 	font-size: 18px; line-height: 1;
 	cursor: pointer; padding: 0;
 }
-.bms-drawer__close:hover, .bms-drawer__close:focus { background: #fff; color: var(--bms-ink); }
+.bms-drawer .bms-drawer__close:hover, .bms-drawer .bms-drawer__close:focus { background: #fff; color: var(--bms-ink); }
 .bms-drawer__body { flex: 1; overflow-y: auto; padding: 16px 24px; display: flex; flex-direction: column; gap: 10px; }
 .bms-drawer__empty { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; padding: 24px 0; font-size: 15px; color: var(--bms-muted); }
 .bms-drawer__empty[hidden] { display: none; }
@@ -410,13 +411,13 @@ header#masthead {
 .bms-line-item__name { font-size: 14px; }
 .bms-line-item__price { font-size: 12px; color: var(--bms-muted); }
 .bms-qty { display: flex; align-items: center; gap: 2px; border: 1px solid var(--bms-line); border-radius: 999px; }
-.bms-qty button {
+.bms-drawer .bms-qty button {
 	width: 34px; height: 34px;
 	border: 0; background: transparent;
 	cursor: pointer; font-size: 15px;
 	color: var(--bms-ink); font-family: 'Jost', sans-serif; padding: 0;
 }
-.bms-qty button:hover, .bms-qty button:focus { background: transparent; color: var(--bms-blue); }
+.bms-drawer .bms-qty button:hover, .bms-drawer .bms-qty button:focus { background: transparent; color: var(--bms-blue); }
 .bms-qty span { min-width: 14px; text-align: center; font-size: 13px; }
 .bms-drawer__foot { padding: 22px 24px; border-top: 1px solid var(--bms-line); display: flex; flex-direction: column; gap: 14px; }
 .bms-drawer__row { display: flex; justify-content: space-between; font-size: 15px; font-variant-numeric: tabular-nums; }
@@ -425,7 +426,7 @@ header#masthead {
 .bms-drawer__hint { font-size: 12px; color: var(--bms-blue); text-align: center; }
 .bms-drawer__hint:empty { display: none; }
 .bms-drawer__note { font-size: 12px; color: var(--bms-muted); text-align: center; }
-.bms-pill {
+.bms-drawer .bms-pill {
 	font-family: 'Jost', sans-serif;
 	font-size: 13px; font-weight: 500;
 	background: var(--bms-ink); color: #fff;
@@ -436,8 +437,42 @@ header#masthead {
 	text-decoration: none;
 	transition: none;
 }
-.bms-pill:hover, .bms-pill:focus { background: var(--bms-blue); color: #fff; }
-.bms-pill--lg { font-size: 14px; padding: 16px 28px; }
+.bms-drawer .bms-pill:hover, .bms-drawer .bms-pill:focus { background: var(--bms-blue); color: #fff; }
+.bms-drawer .bms-pill--lg { font-size: 14px; padding: 16px 28px; }
+
+/* ---------- WooCommerce pages: brand palette instead of Hello Elementor's default pink ----------
+ * Plain buttons and links follow Site Settings → Theme Style; these cover WooCommerce's own button
+ * classes (classic and block cart/checkout) that out-rank the Theme Style selectors.
+ */
+:root { accent-color: var(--bms-ink); }
+.woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce #respond input#submit,
+.woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt,
+.wc-block-components-button:not(.is-link), .wc-block-cart__submit-button, .wc-block-components-checkout-place-order-button,
+.wp-block-button__link, .wp-element-button {
+	background-color: var(--bms-ink) !important;
+	color: #FFFFFF !important;
+	border: 0 !important;
+	border-radius: 999px !important;
+	font-family: 'Jost', sans-serif;
+	font-weight: 500;
+	text-decoration: none;
+}
+.woocommerce a.button:hover, .woocommerce button.button:hover, .woocommerce input.button:hover, .woocommerce #respond input#submit:hover,
+.woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover, .woocommerce input.button.alt:hover,
+.wc-block-components-button:not(.is-link):hover, .wc-block-cart__submit-button:hover, .wc-block-components-checkout-place-order-button:hover,
+.wp-block-button__link:hover, .wp-element-button:hover {
+	background-color: var(--bms-blue) !important;
+	color: #FFFFFF !important;
+}
+.wc-block-components-button.is-link, .wc-block-components-totals-coupon-link, .woocommerce a:not(.button) { color: var(--bms-ink); }
+.wc-block-components-button.is-link:hover, .wc-block-components-totals-coupon-link:hover, .woocommerce a:not(.button):hover { color: var(--bms-blue); }
+.wc-block-components-text-input input:focus, .wc-block-components-select select:focus, .wc-block-components-textarea:focus,
+.woocommerce form .form-row input.input-text:focus, .woocommerce form .form-row textarea:focus, .woocommerce form .form-row select:focus,
+input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="password"]:focus, input[type="search"]:focus, textarea:focus, select:focus {
+	border-color: var(--bms-ink) !important;
+	box-shadow: 0 0 0 1px var(--bms-ink) !important;
+	outline: none;
+}
 
 @media (prefers-reduced-motion: reduce) {
 	.bms-track, .bms-track-r, .bms-sock { animation: none; }

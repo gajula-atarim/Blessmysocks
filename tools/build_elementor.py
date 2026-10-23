@@ -242,7 +242,7 @@ def image(name, size='large', url=None, classes='', radius=None, **kw):
 
 def pill(text, bg, fg):
     return heading(text, 12, 'span', '400', fg, _background_background='classic', _background_color=bg,
-                   _padding=dims(8, 14), _border_radius=dims(999))
+                   _padding=dims(8, 14), _border_radius=dims(999), _css_classes='bms-nowrap')
 
 
 def mark_inner(el, depth=0):
@@ -403,7 +403,7 @@ def bundle():
             col([eyebrow('Mix · Match · Bless'),
                  h2('Build a gift bundle.', lh=1.05),
                  para('Pick any three or more pairs and tees across every range. Three or more pairs save 20%; five or '
-                      'more also ship free. The saving is applied at checkout.', 15, '#3A3F48', 1.65, maxw=440),
+                      'more also ship free. The saving is applied at checkout.', 15, '#3A3F48', 1.65, _element_width_tablet='inherit', maxw=440),
                  row([pill('3+ pairs · 20% off', '#FFFFFF', INK), pill('5+ pairs · free shipping', INK, '#FFFFFF')],
                      'flex-start', g=8),
                  button('Start building →', SITE + '/shop/')],
@@ -441,7 +441,7 @@ def shipping():
         grid([
             col([eyebrow('Shipping &amp; returns'), h2('Packed with care, sent within a day.', lh=1.05),
                  para('Every order is packed by hand and lodged with Australia Post within one business day, with tracking '
-                      'door to door.', 14, MUTED, 1.65, maxw=420)], g=12),
+                      'door to door.', 14, MUTED, 1.65, _element_width_tablet='inherit', maxw=420)], g=12),
             grid([step('01', 'Dispatch', 'Within one business day, Monday to Friday.'),
                   step('02', 'Tracking', 'A tracking link is emailed as soon as your parcel is scanned.')], 2, 2, 1, 24,
                  grid_align_items='start'),
@@ -485,7 +485,7 @@ def story():
             col([eyebrow('Our story', '#A9B8D8'),
                  h2('Faith you can <em style="color:#A9B8D8">walk in.</em>', 'clamp(34px,4vw,52px)', 1.05, '#FFFFFF'),
                  para('Bless My Socks began with a simple idea: everyday clothes that remind us we’re loved. Laura’s words go here.',
-                      15, '#C9CCD2', 1.65, maxw=440),
+                      15, '#C9CCD2', 1.65, _element_width_tablet='inherit', maxw=440),
                  button('Read our story →', '#about', 'blue', 13, (12, 22))], g=20, flex_align_items='flex-start'),
             grid([image('pastel-cream.png', 'medium_large', classes='bms-fill'),
                   image('bundle-1.png', 'medium_large', classes='bms-fill')], 2, 2, 2, 0,
@@ -590,7 +590,7 @@ def footer(menus):
     top = grid([
         col([image('logo-footer-white.png', 'medium', SITE + '/', width=px(150), align='left'),
              heading('Christian socks, tees and gifts. Shipped from Australia.', 13, 'span', '400', '#C9CCD2', lh=1.6,
-                     _element_width='initial', _element_custom_width=px(300))],
+                     _element_width='initial', _element_custom_width=px(300), _element_width_tablet='inherit')],
             g=14, grid_column='custom', grid_column_custom='span 2', grid_column_custom_tablet='span 3',
             grid_column_custom_mobile='span 2'),
         menu_col('SHOP', menus['shop']),

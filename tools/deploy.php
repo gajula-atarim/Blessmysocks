@@ -88,6 +88,23 @@ if ( $kit ) {
 	$ks['lightbox_ui_color']             = '#1E222A';
 	$ks['lightbox_ui_color_hover']       = '#3D5A99';
 	$ks['lightbox_text_color']           = '#1E222A';
+	// Theme Style: replaces Hello Elementor's default pink (#c36) on every plain link and button
+	// (WooCommerce cart, checkout, account pages). Editable under Site Settings → Theme Style.
+	$ks['link_normal_color']                   = '#1E222A';
+	$ks['link_hover_color']                    = '#3D5A99';
+	$ks['button_typography_typography']        = 'custom';
+	$ks['button_typography_font_family']       = 'Jost';
+	$ks['button_typography_font_weight']       = '500';
+	$ks['button_text_color']                   = '#FFFFFF';
+	$ks['button_background_color']             = '#1E222A';
+	$ks['button_border_border']                = 'none';
+	$ks['button_border_radius']                = [ 'unit' => 'px', 'top' => '999', 'right' => '999', 'bottom' => '999', 'left' => '999', 'isLinked' => true ];
+	$ks['button_padding']                      = [ 'unit' => 'px', 'top' => '14', 'right' => '26', 'bottom' => '14', 'left' => '26', 'isLinked' => false ];
+	$ks['button_hover_text_color']             = '#FFFFFF';
+	$ks['button_hover_background_color']       = '#3D5A99';
+	$ks['form_field_border_color']             = '#D9D5CE';
+	$ks['form_field_focus_border_color']       = '#1E222A';
+	$ks['form_field_border_radius']            = [ 'unit' => 'px', 'top' => '6', 'right' => '6', 'bottom' => '6', 'left' => '6', 'isLinked' => true ];
 	$kit->save( [ 'settings' => $ks ] );
 	$log['kit'] = $kit->get_id();
 }
