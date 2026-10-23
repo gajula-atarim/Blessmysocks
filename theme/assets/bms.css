@@ -445,6 +445,16 @@ header#masthead {
  * classes (classic and block cart/checkout) that out-rank the Theme Style selectors.
  */
 :root { accent-color: var(--bms-ink); }
+/* Hello's page container has no wide-alignment support, so WooCommerce's "alignwide" cart/checkout
+   blocks were pushed off-screen by negative margins. Keep them inside the content column. */
+.site-main .wp-block-woocommerce-cart.alignwide,
+.site-main .wp-block-woocommerce-checkout.alignwide,
+.site-main .alignwide {
+	margin-left: 0;
+	margin-right: 0;
+	max-width: 100%;
+	width: 100%;
+}
 .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce #respond input#submit,
 .woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt,
 .wc-block-components-button:not(.is-link), .wc-block-cart__submit-button, .wc-block-components-checkout-place-order-button,
