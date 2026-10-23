@@ -360,7 +360,7 @@ def bestsellers():
             product_card('cream-rib-crew', 'Cream Rib Crew', 'A$20.00', 'pastel-cream.png', palette, 0),
             product_card('sage-rib-crew', 'Sage Rib Crew', 'A$20.00', 'pastel-sage.png', palette, 2),
             product_card('blush-frill-bow-crew', 'Blush Frill Bow Crew', 'A$22.00', 'pastel-blush.png', sub='New'),
-        ], 3, 2, 1, 14),
+        ], 3, 3, 1, 14),
     ], pad_top=SECTION_PAD, flex_gap=gap(20), _element_id='shop')
 
 

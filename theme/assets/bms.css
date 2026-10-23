@@ -49,6 +49,9 @@ header#masthead {
 .bms-brand .elementor-heading-title,
 .bms-brand .hfe-site-title,
 .bms-brand .elementor-heading-title a { white-space: nowrap; }
+.bms-brand .elementor-widget-site-logo { flex: 0 0 auto; }
+.bms-brand .hfe-site-logo img { width: 34px; max-width: none; height: auto; }
+@media (max-width: 767px) { .bms-brand .hfe-site-logo img { width: 30px; } }
 .bms-brand .hfe-site-logo-img,
 .bms-brand .hfe-site-logo img { mix-blend-mode: multiply; }
 
@@ -201,7 +204,7 @@ header#masthead {
 .bms-dot.is-selected { box-shadow: 0 0 0 1.5px #F4F3F1, 0 0 0 2.5px #1E222A; }
 .bms-add .elementor-button { transition: background-color .25s ease, color .25s ease, border-color .25s ease; }
 .bms-add .elementor-button.is-loading { opacity: .55; pointer-events: none; }
-.bms-num .elementor-heading-title { font-variant-numeric: tabular-nums; }
+.bms-num .elementor-heading-title { font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* ---------- Gallery marquee ---------- */
 .bms-track,
