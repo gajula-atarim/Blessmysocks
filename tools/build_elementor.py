@@ -198,7 +198,7 @@ def button(text, url, kind='dark', size=14, pad=(14, 26), classes='', weight='50
     s = dict(text=text, link=link(url), size='sm', **typo('', size, weight))
     s['border_radius'] = dims(999)
     s['text_padding'] = dims(pad[0], pad[1])
-    s['button_hover_transition_duration'] = px(0.25, 's')
+    s['button_hover_transition_duration'] = px(0, 's')  # design swaps hover colours instantly
     if kind == 'dark':
         s.update(background_background='classic', background_color=INK, button_text_color='#FFFFFF',
                  button_background_hover_background='classic', button_background_hover_color=BLUE, hover_color='#FFFFFF')
