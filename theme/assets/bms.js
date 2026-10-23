@@ -74,7 +74,7 @@
 		} else if (count >= 3 && count < 5) {
 			hint.textContent = '20% bundle saving applied · add ' + (5 - count) + ' more for free shipping.';
 		} else if (count >= 5) {
-			hint.textContent = 'Free shipping unlocked.';
+			hint.textContent = '20% bundle saving and free shipping unlocked.';
 		} else {
 			hint.textContent = '';
 		}

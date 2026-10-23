@@ -270,7 +270,7 @@ def hero():
         para('Soft socks and tees that carry a quiet word of faith, every step of the day.', 17, '#3A3F48', 1.6, maxw=440,
              align='center'),
         row([button('Shop bestsellers', '#shop'), button('Our story →', '#about', 'outline')], 'center', g=12),
-        heading('A$20 a pair · 3–4 pairs 20% off · 5+ pairs free shipping', 12, 'span', '400', MUTED, align='center',
+        heading('A$20 a pair · 3+ pairs 20% off · 5+ pairs free shipping', 12, 'span', '400', MUTED, align='center',
                 ls=0.04),
     ], g=22, flex_justify_content='flex-end', flex_align_items='center',
         padding=dims(24, 24, 64, 24), padding_mobile=dims(24, 16, 48, 16), css_classes='bms-hero-content')
@@ -402,9 +402,9 @@ def bundle():
         grid([
             col([eyebrow('Mix · Match · Bless'),
                  h2('Build a gift bundle.', lh=1.05),
-                 para('Pick any three or more pairs and tees across every range. Three or four pairs save 20%; five or '
-                      'more ship free. The saving is applied at checkout.', 15, '#3A3F48', 1.65, maxw=440),
-                 row([pill('3–4 pairs · 20% off', '#FFFFFF', INK), pill('5+ pairs · free shipping', INK, '#FFFFFF')],
+                 para('Pick any three or more pairs and tees across every range. Three or more pairs save 20%; five or '
+                      'more also ship free. The saving is applied at checkout.', 15, '#3A3F48', 1.65, maxw=440),
+                 row([pill('3+ pairs · 20% off', '#FFFFFF', INK), pill('5+ pairs · free shipping', INK, '#FFFFFF')],
                      'flex-start', g=8),
                  button('Start building →', SITE + '/shop/')],
                 g=18, flex_justify_content='center', flex_align_items='flex-start', padding=dims(64),

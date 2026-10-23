@@ -2,7 +2,7 @@
 /**
  * Bless My Socks store rules and the slide-out cart drawer.
  *
- * Bundle pricing (from the homepage copy): 3–4 items save 20%, 5+ items ship free.
+ * Bundle pricing: 3+ items save 20%, and 5+ items also ship free.
  *
  * @package hello-elementor-child
  */
@@ -18,13 +18,13 @@ add_filter( 'woocommerce_currency_symbol', function ( $symbol, $currency ) {
 	return 'AUD' === $currency ? 'A$' : $symbol;
 }, 10, 2 );
 
-// 3–4 items in the cart: 20% bundle saving.
+// 3 or more items in the cart: 20% bundle saving.
 add_action( 'woocommerce_cart_calculate_fees', function ( $cart ) {
 	if ( is_admin() && ! wp_doing_ajax() ) {
 		return;
 	}
 	$qty = $cart->get_cart_contents_count();
-	if ( $qty >= 3 && $qty <= 4 ) {
+	if ( $qty >= 3 ) {
 		$cart->add_fee( __( 'Bundle saving (20%)', 'hello-elementor-child' ), -0.2 * (float) $cart->get_subtotal() );
 	}
 } );
