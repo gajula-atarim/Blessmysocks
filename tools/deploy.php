@@ -25,6 +25,10 @@ $dir = get_stylesheet_directory();
 foreach ( [ 'functions.php', 'inc/store.php', 'assets/bms.css', 'assets/bms.js' ] as $f ) {
 	wp_mkdir_p( dirname( "$dir/$f" ) );
 	file_put_contents( "$dir/$f", $get( "theme/$f" ) );
+	// Without this, OPcache can keep serving the previous PHP until it revalidates.
+	if ( function_exists( 'opcache_invalidate' ) ) {
+		opcache_invalidate( "$dir/$f", true );
+	}
 }
 $log['theme'] = 'ok';
 
