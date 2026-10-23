@@ -136,12 +136,14 @@ header#masthead {
 	z-index: 2;
 }
 .bms-sock-flip img { transform: scaleX(-1); }
-.bms-sock-1 { left: 10%; top: calc(11.52% - 4px); --r: 5deg;  --sway: 5s; --delay: 0s;    --peg: #FFFFFF; }
-.bms-sock-2 { left: 26%; top: calc(14.39% - 4px); --r: 3deg;  --sway: 6s; --delay: -.9s;  --peg: #4A9BD9; }
-.bms-sock-3 { left: 42%; top: calc(15.82% - 4px); --r: 1deg;  --sway: 7s; --delay: -1.8s; --peg: #FFFFFF; }
-.bms-sock-4 { left: 58%; top: calc(15.82% - 4px); --r: -1deg; --sway: 5s; --delay: -2.7s; --peg: #F2C94C; }
-.bms-sock-5 { left: 74%; top: calc(14.39% - 4px); --r: -3deg; --sway: 6s; --delay: -3.6s; --peg: #FFFFFF; }
-.bms-sock-6 { left: 90%; top: calc(11.52% - 4px); --r: -5deg; --sway: 7s; --delay: -4.5s; --peg: #E0524F; }
+/* Socks sit along the line's curve (y = 9 + 7·(1 − (2x − 1)²) %) with a gap in the middle so the
+   hero eyebrow and headline stay clear of them. */
+.bms-sock-1 { left: 8%; top: calc(11.06% - 4px); --r: 5deg; --sway: 5s; --delay: 0s; --peg: #FFFFFF; }
+.bms-sock-2 { left: 21%; top: calc(13.65% - 4px); --r: 3deg; --sway: 6s; --delay: -0.9s; --peg: #4A9BD9; }
+.bms-sock-3 { left: 34%; top: calc(15.28% - 4px); --r: 2deg; --sway: 7s; --delay: -1.8s; --peg: #FFFFFF; }
+.bms-sock-4 { left: 66%; top: calc(15.28% - 4px); --r: -2deg; --sway: 5s; --delay: -2.7s; --peg: #F2C94C; }
+.bms-sock-5 { left: 79%; top: calc(13.65% - 4px); --r: -3deg; --sway: 6s; --delay: -3.6s; --peg: #FFFFFF; }
+.bms-sock-6 { left: 92%; top: calc(11.06% - 4px); --r: -5deg; --sway: 7s; --delay: -4.5s; --peg: #E0524F; }
 
 /* ---------- Shared crops & hovers ---------- */
 .bms-fill, .bms-fill > .elementor-widget-container { height: 100%; }
