@@ -295,7 +295,7 @@ def collection_card(eyebrow_text, accent, title, sub, hero_img, cat, items, pric
         # Tablets fit three cards per row: tighter padding and a 22px title (phones keep the desktop values).
         col([eyebrow(eyebrow_text, accent, 10, 0.26),
              heading(title, 28, 'h3', '300', INK, lh=1.1, size_tablet=22, size_mobile=28),
-             heading(sub, 13, 'span', '400', MUTED)], g=8, padding=dims(26, 26, 0, 26),
+             heading(sub, 13, 'span', '400', MUTED, size_tablet=12, size_mobile=13)], g=8, padding=dims(26, 26, 0, 26),
             padding_tablet=dims(20, 18, 0, 18), padding_mobile=dims(26, 26, 0, 26)),
         image(hero_img, 'medium_large', cat_url(cat), 'bms-ar-43', 6, _margin=dims(22, 26, 0, 26),
               _margin_tablet=dims(16, 18, 0, 18), _margin_mobile=dims(22, 26, 0, 26)),
