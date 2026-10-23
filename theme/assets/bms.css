@@ -201,6 +201,7 @@ header#masthead {
 .bms-zoom:hover img { transform: scale(1.04); }
 
 /* ---------- Collections ---------- */
+.bms-card-foot { margin-top: auto !important; } /* footers line up when cards stretch to equal height */
 .bms-strip-wrap { position: relative; }
 .bms-strip {
 	flex-wrap: nowrap !important;

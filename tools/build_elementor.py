@@ -290,19 +290,24 @@ def collection_card(eyebrow_text, accent, title, sub, hero_img, cat, items, pric
                         **typo('title', 11, '400'), _css_classes='bms-strip-item')
                  for f, name, slug in items],
                 flex_direction='row', flex_gap=gap(8), flex_wrap='nowrap', padding=dims(18, 26),
-                css_classes='bms-strip')
+                padding_tablet=dims(14, 18), padding_mobile=dims(18, 26), css_classes='bms-strip')
     return col([
-        col([eyebrow(eyebrow_text, accent, 10, 0.26), heading(title, 28, 'h3', '300', INK, lh=1.1),
-             heading(sub, 13, 'span', '400', MUTED)], g=8, padding=dims(26, 26, 0, 26)),
-        image(hero_img, 'medium_large', cat_url(cat), 'bms-ar-43', 6, _margin=dims(22, 26, 0, 26)),
+        # Tablets fit three cards per row: tighter padding and a 22px title (phones keep the desktop values).
+        col([eyebrow(eyebrow_text, accent, 10, 0.26),
+             heading(title, 28, 'h3', '300', INK, lh=1.1, size_tablet=22, size_mobile=28),
+             heading(sub, 13, 'span', '400', MUTED)], g=8, padding=dims(26, 26, 0, 26),
+            padding_tablet=dims(20, 18, 0, 18), padding_mobile=dims(26, 26, 0, 26)),
+        image(hero_img, 'medium_large', cat_url(cat), 'bms-ar-43', 6, _margin=dims(22, 26, 0, 26),
+              _margin_tablet=dims(16, 18, 0, 18), _margin_mobile=dims(22, 26, 0, 26)),
         con([strip,
              button('←', '#', 'arrow', 13, (0, 0), 'bms-arrow bms-prev', '400'),
              button('→', '#', 'arrow', 13, (0, 0), 'bms-arrow bms-next', '400')],
             css_classes='bms-strip-wrap', position='relative'),
         row([heading(price_from, 12, 'span', '400', MUTED), heading('EXPLORE →', 12, 'span', '400', INK, ls=0.18)],
-            g=12, html_tag='a', link=link(cat_url(cat)), padding=dims(18, 26), border_border='solid',
+            g=12, html_tag='a', link=link(cat_url(cat)), padding=dims(18, 26), padding_tablet=dims(16, 18),
+            padding_mobile=dims(18, 26), border_border='solid',
             border_width=dims(1, 0, 0, 0), border_color='#E4E0D9', background_background='classic',
-            background_color='rgba(255,255,255,0.35)'),
+            background_color='rgba(255,255,255,0.35)', css_classes='bms-card-foot'),
     ], background_background='classic', background_color='#F1EFEA', border_border='solid', border_width=dims(1),
         border_color='#E4E0D9', border_radius=dims(8), overflow='hidden', css_classes='bms-lift')
 
@@ -328,7 +333,7 @@ def collections():
                             'cat-hero-statement.png', 'statement-socks', st, 'From A$22.00'),
             collection_card('Thoughtful picks', BLUE, 'Gifts &amp; Tees', 'For church, family and friends.',
                             'cat-hero-gifts.png', 'gifts-tees', gf, 'From A$20.00'),
-        ], 3, 2, 1, 20, grid_align_items='start'),
+        ], 3, 3, 1, 20, grid_align_items='start', grid_align_items_tablet='stretch'),
     ], pad_top=SECTION_PAD, flex_gap=gap(32))
 
 
