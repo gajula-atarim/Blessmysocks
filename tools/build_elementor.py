@@ -271,7 +271,8 @@ def hero():
              align='center'),
         row([button('Shop bestsellers', '#shop'), button('Our story →', '#about', 'outline')], 'center', g=12),
         heading('A$20 a pair · 3+ pairs 20% off · 5+ pairs free shipping', 12, 'span', '400', MUTED, align='center',
-                ls=0.04, size_mobile=11, typography_letter_spacing_mobile=px(0, 'em')),  # one line down to ~292px screens
+                ls=0.04, size_mobile=11, typography_letter_spacing_mobile=px(0, 'em'),
+                _css_classes='bms-hero-note'),  # one line on phones; bms.css drops it to 10px under 360px
     ], g=22, flex_justify_content='flex-end', flex_align_items='center',
         padding=dims(24, 24, 64, 24), padding_mobile=dims(24, 16, 48, 16), css_classes='bms-hero-content')
     return con([line, content], css_classes='bms-hero', position='relative', overflow='hidden',

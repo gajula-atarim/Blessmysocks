@@ -140,6 +140,10 @@ header#masthead {
 .bms-hero > .bms-hero-content,
 .bms-hero > .e-con-inner > .bms-hero-content { position: relative; z-index: 2; }
 .bms-hero-content .elementor-widget-button { pointer-events: auto; }
+/* Smallest phones (e.g. 320px): the pricing note needs 10px to stay on one line. */
+@media (max-width: 359px) {
+	.bms-hero-note .elementor-heading-title { font-size: 10px !important; }
+}
 
 .bms-sock {
 	--sock-w: clamp(64px, 9vw, 140px);
