@@ -242,8 +242,9 @@ def image(name, size='large', url=None, classes='', radius=None, **kw):
 
 
 def pill(text, bg, fg):
-    return heading(text, 12, 'span', '400', fg, _background_background='classic', _background_color=bg,
-                   _padding=dims(8, 14), _border_radius=dims(999), _css_classes='bms-nowrap')
+    # Phones: smaller text and side padding so both bundle pills sit side by side down to 320px.
+    return heading(text, 12, 'span', '400', fg, size_mobile=11, _background_background='classic', _background_color=bg,
+                   _padding=dims(8, 14), _padding_mobile=dims(7, 10), _border_radius=dims(999), _css_classes='bms-nowrap')
 
 
 def mark_inner(el, depth=0):
@@ -407,10 +408,10 @@ def bundle():
                  para('Pick any three or more pairs and tees across every range. Three or more pairs save 20%; five or '
                       'more also ship free. The saving is applied at checkout.', 15, '#3A3F48', 1.65, _element_width_tablet='inherit', maxw=440),
                  row([pill('3+ pairs · 20% off', '#FFFFFF', INK), pill('5+ pairs · free shipping', INK, '#FFFFFF')],
-                     'flex-start', g=8),
+                     'flex-start', g=8, wrap='nowrap', flex_gap_mobile=gap(6)),
                  button('Start building →', SITE + '/shop/')],
                 g=18, flex_justify_content='center', flex_align_items='flex-start', padding=dims(64),
-                padding_tablet=dims(40), padding_mobile=dims(28)),
+                padding_tablet=dims(40), padding_mobile=dims(20)),
             grid([image('bundle-1.png', 'medium_large', classes='bms-fill', radius=4),
                   image('bundle-2.png', 'medium_large', classes='bms-fill', radius=4),
                   image('bundle-3.png', 'medium_large', classes='bms-fill', radius=4)], 3, 3, 3, 6,
