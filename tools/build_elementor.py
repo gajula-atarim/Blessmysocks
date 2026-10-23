@@ -415,7 +415,7 @@ def bundle():
             grid([image('bundle-1.png', 'medium_large', classes='bms-fill', radius=4),
                   image('bundle-2.png', 'medium_large', classes='bms-fill', radius=4),
                   image('bundle-3.png', 'medium_large', classes='bms-fill', radius=4)], 3, 3, 3, 6,
-                 padding=dims(6), min_height=px(320)),
+                 padding=dims(6), min_height=px(320), min_height_mobile=px(0), css_classes='bms-bundle-media'),
         ], 2, 1, 1, 0, background_background='classic', background_color='#E6EAF1', border_radius=dims(6),
             overflow='hidden'),
     ], pad_top=SECTION_PAD)

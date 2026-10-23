@@ -182,6 +182,13 @@ header#masthead {
 /* ---------- Shared crops & hovers ---------- */
 .bms-fill, .bms-fill > .elementor-widget-container { height: 100%; }
 .bms-fill img { width: 100%; height: 100% !important; object-fit: cover; display: block; }
+/* Bundle photos on phones: 3:4 tiles show each whole sock pair (the pairs fill ~65% of the photo
+   width), instead of a narrow strip of a tall 320px tile. */
+@media (max-width: 767px) {
+	.bms-bundle-media .bms-fill,
+	.bms-bundle-media .bms-fill > .elementor-widget-container { height: auto; }
+	.bms-bundle-media .bms-fill img { aspect-ratio: 3 / 4; height: auto !important; object-position: 47% 50%; }
+}
 .bms-ar-43 img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
 .bms-ar-45 img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
 .bms-ar-11 img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
