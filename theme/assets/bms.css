@@ -56,6 +56,36 @@ header#masthead {
 .bms-brand .hfe-site-logo-img,
 .bms-brand .hfe-site-logo img { mix-blend-mode: multiply; }
 
+/* Mobile header: logo, brand name, hamburger and Cart pill share one centre line. */
+.bms-brand .hfe-site-logo,
+.bms-brand .hfe-site-logo-set,
+.bms-brand .hfe-site-logo-container,
+.bms-brand .hfe-site-logo a { display: block; line-height: 0; }
+.bms-brand .hfe-site-logo img { display: block; }
+.bms-brand .elementor-heading-title,
+.bms-brand .hfe-heading { line-height: 1; display: block; }
+@media (max-width: 767px) {
+	.bms-bar .hfe-nav-menu__toggle {
+		width: 36px;
+		height: 36px;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		line-height: 0;
+	}
+	.bms-bar .hfe-nav-menu__toggle svg,
+	.bms-bar .hfe-nav-menu__toggle i { display: block; }
+	.bms-bar .elementor-widget-navigation-menu { align-self: center; justify-self: end; }
+	.bms-bar .bms-cart { align-self: center; }
+}
+/* Narrow phones: tighten the brand name so it never runs into the hamburger. */
+@media (max-width: 360px) {
+	.bms-brand .elementor-heading-title,
+	.bms-brand .hfe-heading { font-size: 11px !important; letter-spacing: .1em !important; }
+}
+
 /* UAE Cart widget styled as the "Cart (n)" pill */
 .bms-cart .hfe-menu-cart__toggle .elementor-button {
 	display: inline-flex;

@@ -566,11 +566,14 @@ def header(menu_id):
                     grid_columns_grid=custom('1fr auto 1fr'), grid_columns_grid_tablet=custom('1fr auto 1fr'),
                     grid_columns_grid_mobile=custom('auto 1fr auto'), grid_rows_grid=px(1, 'fr'),
                     grid_gaps={'unit': 'px', 'column': '16', 'row': '0', 'isLinked': False}, grid_align_items='center',
+                    # Phones: hamburger sits right beside the Cart pill.
+                    grid_gaps_mobile={'unit': 'px', 'column': '4', 'row': '0', 'isLinked': False},
                     grid_justify_items='stretch', padding=dims(12, 40), padding_tablet=dims(12, 24),
                     padding_mobile=dims(10, 16))
     return [mark_inner(con([
         con([heading('The new sock range is on its way · Sign up to hear first', 12, 'span', '400', '#FFFFFF',
-                     align='center', ls=0.08, lh=16, lh_unit='px')],
+                     align='center', ls=0.08, lh=16, lh_unit='px', size_mobile=11,
+                     typography_letter_spacing_mobile=px(0.02, 'em'))],
             background_background='classic', background_color=INK, padding=dims(9, 16), min_height=px(34),
             flex_justify_content='center', css_classes='bms-announcement'),
         con([bar_inner], background_background='classic', background_color='rgba(244,243,241,0.94)',
