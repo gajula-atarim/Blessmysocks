@@ -105,8 +105,19 @@ if ( $kit ) {
 	$ks['form_field_border_color']             = '#D9D5CE';
 	$ks['form_field_focus_border_color']       = '#1E222A';
 	$ks['form_field_border_radius']            = [ 'unit' => 'px', 'top' => '6', 'right' => '6', 'bottom' => '6', 'left' => '6', 'isLinked' => true ];
+
+	// Favicon. Saving the kit syncs its Site Identity → Favicon field onto WordPress's site_icon option,
+	// so an empty field here would wipe the favicon. Keep both pointing at the uploaded site icon.
+	$icon = get_posts( [ 'post_type' => 'attachment', 'posts_per_page' => 1, 'fields' => 'ids', 'meta_key' => '_wp_attached_file', 'meta_value' => '2026/10/bms-site-icon.png' ] );
+	if ( $icon ) {
+		$ks['site_favicon'] = [ 'id' => $icon[0], 'url' => wp_get_attachment_url( $icon[0] ) ];
+	}
 	$kit->save( [ 'settings' => $ks ] );
-	$log['kit'] = $kit->get_id();
+	if ( $icon ) {
+		update_option( 'site_icon', $icon[0] );
+	}
+	$log['kit']  = $kit->get_id();
+	$log['icon'] = $icon ? (int) get_option( 'site_icon' ) : 'site icon attachment not found';
 }
 
 // 4. Elementor documents.
