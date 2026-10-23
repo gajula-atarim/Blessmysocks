@@ -564,7 +564,7 @@ def header(menu_id):
                   _css_classes='bms-cart', _element_width='auto', _flex_align_self='center')
     bar_inner = con([brand, nav, cart], content_width='boxed', boxed_width=px(1320), container_type='grid',
                     grid_columns_grid=custom('1fr auto 1fr'), grid_columns_grid_tablet=custom('1fr auto 1fr'),
-                    grid_columns_grid_mobile=custom('1fr auto auto'), grid_rows_grid=px(1, 'fr'),
+                    grid_columns_grid_mobile=custom('auto 1fr auto'), grid_rows_grid=px(1, 'fr'),
                     grid_gaps={'unit': 'px', 'column': '16', 'row': '0', 'isLinked': False}, grid_align_items='center',
                     grid_justify_items='stretch', padding=dims(12, 40), padding_tablet=dims(12, 24),
                     padding_mobile=dims(10, 16))
