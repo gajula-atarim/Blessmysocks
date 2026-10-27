@@ -141,7 +141,7 @@ sup.bms-reg {
 /* ---------- Hero ---------- */
 .bms-hero {
 	/* Client comment: half the former height (was clamp(680px, 90vh, 860px)). */
-	height: clamp(380px, 46vh, 440px);
+	height: clamp(420px, 46vh, 440px); /* 420px floor keeps the eyebrow clear of the clothesline on laptop screens */
 	background-image: linear-gradient(180deg, #C9D6E8 0%, #E3E8F0 55%, #F4F3F1 100%);
 }
 .bms-hero::after {
