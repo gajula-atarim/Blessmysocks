@@ -102,7 +102,13 @@ sup.bms-reg {
 	margin-left: .05em;
 }
 .bms-brand .hfe-heading-text { white-space: nowrap; }
-.bms-brand sup.bms-reg { margin-left: -.18em; } /* the widget prints a space before its "After" text */
+/* The Site Title widget prints a space before its "After" text, widened by the letter-spacing; pull the ®
+   back so it sits ~0.06em from the S. Values are in the ®'s own em (.42 of the name) per letter-spacing step. */
+.bms-brand sup.bms-reg { margin-left: -1.62em; }
+@media (max-width: 1024px) { .bms-brand sup.bms-reg { margin-left: -1.335em; } }
+@media (max-width: 767px) { .bms-brand sup.bms-reg { margin-left: -1.237em; } }
+@media (max-width: 389px) { .bms-brand sup.bms-reg { margin-left: -1.144em; } }
+@media (max-width: 359px) { .bms-brand sup.bms-reg { margin-left: -1.047em; } }
 
 /* UAE Cart widget styled as the "Cart (n)" pill */
 .bms-cart .hfe-menu-cart__toggle .elementor-button {
@@ -161,6 +167,7 @@ sup.bms-reg {
 .bms-hero > .e-con-inner > .bms-hero-content { position: relative; z-index: 2; }
 .bms-hero-content .elementor-widget-button { pointer-events: auto; }
 @media (max-width: 767px) { .bms-hero { height: 410px; } }
+@media (max-width: 359px) { .bms-hero { height: 450px; } } /* copy wraps to more lines on the narrowest phones */
 /* Smallest phones (e.g. 320px): the pricing note needs 10px to stay on one line. */
 @media (max-width: 359px) {
 	.bms-hero-note .elementor-heading-title { font-size: 10px !important; }
