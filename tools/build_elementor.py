@@ -267,20 +267,23 @@ def hero():
                css_classes='bms-line')
     content = col([
         eyebrow('Christian socks &amp; tees', align='center'),
-        heading('Walk in<br><em style="color:#3D5A99">faith.</em>', 'clamp(52px,7vw,96px)', 'h1', '300', INK,
+        heading('Walk in<br><em style="color:#3D5A99">faith.</em>', 'clamp(36px,4.4vw,58px)', 'h1', '300', INK,
                 align='center', ls=-0.02, lh=0.98),
-        para('Soft socks and tees that carry a quiet word of faith, every step of the day.', 17, '#3A3F48', 1.6, maxw=440,
-             align='center'),
+        para('Soft socks and tees that carry a quiet word of faith, every step of the day.', 15, '#3A3F48', 1.5, maxw=440,
+             align='center', typography_font_size_mobile=px(14)),
         row([button('Shop bestsellers', '#shop'), button('Our story →', '#about', 'outline')], 'center', g=12),
         heading('A$20 a pair · 3+ pairs 20% off · 5+ pairs free shipping', 12, 'span', '400', MUTED, align='center',
                 ls=0.04, size_mobile=11, typography_letter_spacing_mobile=px(0, 'em'),
                 _css_classes='bms-hero-note'),  # one line on phones; bms.css drops it to 10px under 360px
-    ], g=22, flex_justify_content='flex-end', flex_align_items='center',
-        padding=dims(24, 24, 64, 24), padding_mobile=dims(24, 16, 48, 16), css_classes='bms-hero-content')
-    return con([line, content], css_classes='bms-hero', position='relative', overflow='hidden',
-               flex_justify_content='flex-end', min_height=px(680),
-               background_background='video', background_video_link=UP + 'hero-video.mp4',
-               background_video_fallback=img('hero-poster.jpg'))
+    ], g=12, flex_gap_mobile=gap(10), flex_justify_content='flex-end', flex_align_items='center',
+        padding=dims(24, 24, 28, 24), padding_mobile=dims(16, 16, 22, 16), css_classes='bms-hero-content')
+    # Client comment: the cloud area at half its former height, framed as a rounded panel inside the same
+    # 1180px column (8px corners) as the sock photo boxes below. Panel height is set in bms.css (.bms-hero).
+    panel = con([line, content], css_classes='bms-hero', position='relative', overflow='hidden',
+                flex_justify_content='flex-end', min_height=px(380), border_radius=dims(8),
+                background_background='video', background_video_link=UP + 'hero-video.mp4',
+                background_video_fallback=img('hero-poster.jpg'))
+    return boxed([panel], pad_top=20, padding_tablet=dims(16, 24, 0, 24), padding_mobile=dims(12, 16, 0, 16))
 
 
 def collection_card(eyebrow_text, accent, title, sub, hero_img, cat, items, price_from):
@@ -527,7 +530,8 @@ def values():
 def marquee():
     items = []
     for _ in range(10):
-        items.append(heading('BLESS MY SOCKS', 'clamp(40px,6vw,72px)', 'span', '300', '#D3D0CA', ls=0.12))
+        items.append(heading('BLESS MY SOCKS<sup class="bms-reg">®</sup>', 'clamp(40px,6vw,72px)', 'span', '300',
+                             '#D3D0CA', ls=0.12))
         items.append(heading('—', 'clamp(40px,6vw,72px)', 'span', '300', BLUE))
     return con([con(items, flex_direction='row', flex_gap=gap(48), flex_wrap='nowrap', flex_align_items='center',
                     css_classes='bms-track bms-marquee-text')],
@@ -543,23 +547,27 @@ def home():
 
 def header(menu_id):
     brand = row([
+        # Client comment: dove and name 3x larger (34px -> 101px, 15px -> 45px on wide screens).
         widget('site-logo', site_logo_fallback='yes', custom_image=img('logo-icon.png'), site_logo_size_size='full',
-               align='left', width=px(34), width_mobile=px(30), link_to='default', space=px(100, '%'),
-               _element_width='auto'),
+               align='left', width=px(101), width_tablet=px(72), width_mobile=px(45), link_to='default',
+               space=px(100, '%'), _element_width='auto'),
         widget('hfe-site-title', heading_tag='span', heading_link='default', heading_text_align='left',
-               heading_color=INK, **typo('heading', 15, '400', ls=0.22, transform='uppercase', size_mobile=12),
-               heading_typography_letter_spacing_mobile=px(0.16, 'em'), _element_width='auto'),
+               after='<sup class="bms-reg">®</sup>',
+               heading_color=INK, **typo('heading', 'clamp(22px,3.1vw,45px)', '400', ls=0.22, transform='uppercase',
+                                         size_mobile=16),
+               heading_typography_letter_spacing_tablet=px(0.16, 'em'),
+               heading_typography_letter_spacing_mobile=px(0.14, 'em'), _element_width='auto'),
     ], 'flex-start', g=10, wrap='nowrap', css_classes='bms-brand', _flex_align_self='center')
     nav = widget('navigation-menu', menu=str(menu_id), layout='horizontal', navmenu_align='center', dropdown='mobile',
                  resp_align='right', hamburger_align='right', full_width_dropdown='yes', submenu_icon='arrow',
                  pointer='none', padding_horizontal_menu_item=px(0), padding_vertical_menu_item=px(6),
                  menu_space_between=px(28), menu_space_between_tablet=px(18),
                  color_menu_item=INK, color_menu_item_hover=BLUE, color_menu_item_active=INK,
-                 **typo('menu', 13, '400', ls=0.02),
+                 **typo('menu', 15, '400', ls=0.02),
                  background_color_dropdown_item=BG, color_dropdown_item=INK, color_dropdown_item_hover=BLUE,
                  background_color_dropdown_item_hover='#FFFFFF', padding_horizontal_dropdown_item=px(24),
                  padding_vertical_dropdown_item=px(14), distance_from_menu=px(13),
-                 **typo('dropdown', 14, '400'),
+                 **typo('dropdown', 15, '400'),
                  toggle_color=INK, toggle_background_color='rgba(0,0,0,0)', toggle_size=px(20),
                  toggle_border_width=px(0), toggle_border_radius=px(999))
     cart = widget('hfe-cart', hfe_cart_type='custom', items_indicator='bubble', show_subtotal='', align='right',
@@ -571,7 +579,7 @@ def header(menu_id):
                   items_indicator_text_hover_color=INK, items_indicator_background_hover_color='#FFFFFF',
                   _css_classes='bms-cart', _element_width='auto', _flex_align_self='center')
     bar_inner = con([brand, nav, cart], content_width='boxed', boxed_width=px(1320), container_type='grid',
-                    grid_columns_grid=custom('1fr auto 1fr'), grid_columns_grid_tablet=custom('1fr auto 1fr'),
+                    grid_columns_grid=custom('auto 1fr auto'), grid_columns_grid_tablet=custom('auto 1fr auto'),
                     grid_columns_grid_mobile=custom('auto 1fr auto'), grid_rows_grid=px(1, 'fr'),
                     grid_gaps={'unit': 'px', 'column': '16', 'row': '0', 'isLinked': False}, grid_align_items='center',
                     # Phones: hamburger sits right beside the Cart pill.
@@ -612,7 +620,8 @@ def footer(menus):
         grid_justify_content_mobile='space-between',
         grid_gaps_mobile={'unit': 'px', 'column': '16', 'row': '32', 'isLinked': False})
     bottom = row([
-        widget('copyright', shortcode='© 2026 Bless My Socks® · Australia', align='left', title_color='#C9CCD2',
+        widget('copyright', shortcode='© 2026 Bless My Socks® · Australia. Bless My Socks® and Bless My® are registered '
+                                      'trademarks. All Rights Reserved.', align='left', title_color='#C9CCD2',
                **typo('caption', 12, '400')),
         heading('Secure checkout · PayPal · Stripe', 12, 'span', '400', '#C9CCD2'),
     ], g=16, padding=dims(20, 0, 0, 0), border_border='solid', border_width=dims(1, 0, 0, 0), border_color='#343944')
