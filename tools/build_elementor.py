@@ -283,7 +283,8 @@ def hero():
                 flex_justify_content='flex-end', min_height=px(380), border_radius=dims(8),
                 background_background='video', background_video_link=UP + 'hero-video.mp4',
                 background_video_fallback=img('hero-poster.jpg'))
-    return boxed([panel], pad_top=20, padding_tablet=dims(16, 24, 0, 24), padding_mobile=dims(12, 16, 0, 16))
+    # Same 1320px column as the header, so the panel's edges line up with the logo and the Cart pill.
+    return boxed([panel], width=1320, pad_top=20, padding_tablet=dims(16, 24, 0, 24), padding_mobile=dims(12, 16, 0, 16))
 
 
 def collection_card(eyebrow_text, accent, title, sub, hero_img, cat, items, price_from):

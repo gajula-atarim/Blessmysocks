@@ -141,7 +141,7 @@ sup.bms-reg {
 /* ---------- Hero ---------- */
 .bms-hero {
 	/* Client comment: half the former height (was clamp(680px, 90vh, 860px)). */
-	height: clamp(380px, 46vh, 430px);
+	height: clamp(380px, 46vh, 440px);
 	background-image: linear-gradient(180deg, #C9D6E8 0%, #E3E8F0 55%, #F4F3F1 100%);
 }
 .bms-hero::after {
@@ -174,7 +174,7 @@ sup.bms-reg {
 }
 
 .bms-sock {
-	--sock-w: clamp(36px, 5vw, 72px);
+	--sock-w: clamp(36px, 5vw, 76px);
 	position: absolute !important;
 	width: var(--sock-w) !important;
 	max-width: none !important;
