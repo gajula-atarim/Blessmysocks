@@ -16,7 +16,8 @@ $media = function ( $name ) use ( $B ) {
 		'post_type'      => 'attachment',
 		'posts_per_page' => 1,
 		'fields'         => 'ids',
-		'meta_query'     => [ [ 'key' => '_wp_attached_file', 'value' => '/bms-' . $name, 'compare' => 'LIKE' ] ], // phpcs:ignore WordPress.DB.SlowDBQuery
+		// '/bms-<stem>.' also finds the attachment once tools/optimize.php has switched it to WebP.
+		'meta_query'     => [ [ 'key' => '_wp_attached_file', 'value' => '/bms-' . pathinfo( $name, PATHINFO_FILENAME ) . '.', 'compare' => 'LIKE' ] ], // phpcs:ignore WordPress.DB.SlowDBQuery
 	] );
 	if ( $found ) {
 		return (int) $found[0];

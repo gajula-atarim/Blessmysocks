@@ -35,7 +35,10 @@ $log['theme'] = 'ok';
 // 1a. Product catalogue (names, prices, sizes, photos) to match the Shop and Product designs.
 eval( '?>' . $get( 'tools/catalog.php' ) );
 
-// 1b. Contact Form 7 (the Contact page form), installed from wordpress.org if missing.
+// 1b. Lighter images (WebP) and cloud video; fills $asset_urls (old file URL => new) for the Elementor data below.
+eval( '?>' . $get( 'tools/optimize.php' ) );
+
+// 1c. Contact Form 7 (the Contact page form), installed from wordpress.org if missing.
 if ( ! file_exists( WP_PLUGIN_DIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 	require_once ABSPATH . 'wp-admin/includes/misc.php';
@@ -206,8 +209,8 @@ if ( $kit ) {
 }
 
 // 4. Elementor documents.
-$json = function ( $name ) use ( $get, $menus, $cf7_shortcode ) {
-	return json_decode( strtr( $get( "elementor/$name.json" ), $menus + [ 'CF7_CONTACT' => addslashes( $cf7_shortcode ) ] ), true );
+$json = function ( $name ) use ( $get, $menus, $cf7_shortcode, $asset_urls ) {
+	return json_decode( strtr( $get( "elementor/$name.json" ), $menus + [ 'CF7_CONTACT' => addslashes( $cf7_shortcode ) ] + $asset_urls ), true );
 };
 $ids  = get_option( 'bms_build_ids', [] );
 $save = function ( $key, $args, $elements, $meta = [], $settings = [] ) use ( &$ids ) {

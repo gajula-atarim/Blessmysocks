@@ -31,6 +31,17 @@ add_action( 'wp_enqueue_scripts', function () {
 	}
 }, 20 );
 
+// Jost is loaded once, in the <head>, by the stylesheet above (weights 300/400/500 and italics). Elementor would
+// add a second full copy of the family later in the page, which only costs extra downloads.
+add_filter( 'elementor/frontend/print_google_fonts', '__return_false' );
+add_filter( 'wp_resource_hints', function ( $urls, $type ) {
+	if ( 'preconnect' === $type ) {
+		$urls[] = [ 'href' => 'https://fonts.gstatic.com', 'crossorigin' => 'anonymous' ];
+		$urls[] = 'https://fonts.googleapis.com';
+	}
+	return $urls;
+}, 10, 2 );
+
 // Contact Form 7: keep the form markup as written (no automatic <p>/<br> wrapping), so bms.css can lay it out.
 add_filter( 'wpcf7_autop_or_not', '__return_false' );
 

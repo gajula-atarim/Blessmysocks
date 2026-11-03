@@ -96,15 +96,15 @@ function bms_dots( $product ) {
 	return $out;
 }
 
-/** A product card (Shop grid and "Pairs well with"). */
-function bms_card( $product, $classes = '' ) {
+/** A product card (Shop grid and "Pairs well with"). First-row Shop photos load straight away; the rest lazily. */
+function bms_card( $product, $eager = false ) {
 	$info = bms_product_info( $product );
 	$link = esc_url( $product->get_permalink() );
 	ob_start();
 	?>
 	<div class="bms-card__media">
 		<a href="<?php echo $link; // phpcs:ignore WordPress.Security.EscapeOutput ?>" tabindex="-1" aria-hidden="true">
-			<?php echo wp_get_attachment_image( $product->get_image_id(), 'woocommerce_single', false, [ 'alt' => $product->get_name(), 'loading' => 'lazy' ] ); ?>
+			<?php echo wp_get_attachment_image( $product->get_image_id(), 'woocommerce_single', false, [ 'alt' => $product->get_name(), 'loading' => $eager ? 'eager' : 'lazy', 'fetchpriority' => $eager ? 'high' : 'auto', 'sizes' => '(max-width: 600px) 100vw, 240px' ] ); ?>
 		</a>
 		<?php if ( $info['tag'] ) : ?><span class="bms-card__tag"><?php echo esc_html( $info['tag'] ); ?></span><?php endif; ?>
 	</div>
@@ -248,11 +248,12 @@ add_action( 'woocommerce_before_single_product_summary', function () {
 	$ids = array_values( array_filter( array_merge( [ $product->get_image_id() ], $product->get_gallery_image_ids() ) ) );
 	?>
 	<div class="bms-pdp-gallery">
-		<div class="bms-pdp-main"><?php echo wp_get_attachment_image( $ids[0] ?? 0, 'woocommerce_single', false, [ 'alt' => $product->get_name(), 'data-bms-main' => '1' ] ); ?></div>
+		<?php // The main photo is the page's largest element: load it first. Thumbnails and swatches load lazily. ?>
+		<div class="bms-pdp-main"><?php echo wp_get_attachment_image( $ids[0] ?? 0, 'woocommerce_single', false, [ 'alt' => $product->get_name(), 'data-bms-main' => '1', 'loading' => 'eager', 'fetchpriority' => 'high' ] ); ?></div>
 		<?php if ( count( $ids ) > 1 ) : ?>
 			<div class="bms-pdp-thumbs">
 				<?php foreach ( $ids as $i => $id ) : ?>
-					<button type="button" class="bms-pdp-thumb<?php echo 0 === $i ? ' is-active' : ''; ?>" aria-label="View image <?php echo (int) $i + 1; ?>" data-src="<?php echo esc_url( wp_get_attachment_image_url( $id, 'woocommerce_single' ) ); ?>" data-srcset="<?php echo esc_attr( (string) wp_get_attachment_image_srcset( $id, 'woocommerce_single' ) ); ?>"><?php echo wp_get_attachment_image( $id, 'thumbnail' ); ?></button>
+					<button type="button" class="bms-pdp-thumb<?php echo 0 === $i ? ' is-active' : ''; ?>" aria-label="View image <?php echo (int) $i + 1; ?>" data-src="<?php echo esc_url( wp_get_attachment_image_url( $id, 'woocommerce_single' ) ); ?>" data-srcset="<?php echo esc_attr( (string) wp_get_attachment_image_srcset( $id, 'woocommerce_single' ) ); ?>"><?php echo wp_get_attachment_image( $id, 'thumbnail', false, [ 'loading' => 'lazy' ] ); ?></button>
 				<?php endforeach; ?>
 			</div>
 		<?php endif; ?>
