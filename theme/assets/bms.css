@@ -981,9 +981,9 @@ body .wc-block-components-totals-coupon__button.wc-block-components-button:hover
 
 /* Confirmation page details */
 .bms-order-received .woocommerce-columns::before, .bms-order-received .woocommerce-columns::after { display: none !important; }
-.bms-order-received a.bms-ty-btn { color: #FFFFFF !important; border: 0; }
+.bms-order-received a.bms-ty-btn { color: #FFFFFF !important; border: 0; text-decoration: none !important; }
 .bms-order-received a.bms-ty-btn:hover, .bms-order-received a.bms-ty-btn:focus { color: #FFFFFF !important; background: #3D5A99; }
-.bms-order-received .woocommerce-button.button.order-actions-button.cancel { background: transparent !important; color: #1E222A !important; }
+.bms-order-received .woocommerce-button.button.order-actions-button.cancel { background: transparent !important; color: #1E222A !important; border: 1px solid #1E222A !important; }
 .bms-order-received .woocommerce-button.button.order-actions-button.cancel:hover { background: #1E222A !important; color: #FFFFFF !important; }
 .bms-order-received table.shop_table tfoot th, .bms-order-received table.shop_table tfoot td,
 .bms-order-received table.shop_table tfoot td strong, .bms-order-received table.shop_table tfoot .amount { font-weight: 400; }
