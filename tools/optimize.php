@@ -94,6 +94,11 @@ if ( preg_match( '/apache|litespeed/i', $_SERVER['SERVER_SOFTWARE'] ?? '' ) && i
 		'ExpiresByType image/png "access plus 6 months"',
 		'ExpiresByType image/jpeg "access plus 6 months"',
 		'</IfModule>',
+		'<IfModule mod_headers.c>',
+		'<FilesMatch "\\.(mp4|webp|png|jpe?g)$">',
+		'Header set Cache-Control "public, max-age=15552000"',
+		'</FilesMatch>',
+		'</IfModule>',
 	] );
 	$log['htaccess'] = 'expires added';
 }
