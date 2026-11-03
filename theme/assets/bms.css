@@ -571,7 +571,8 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, in
 /* Current page in the header menu (About on the About page). Not on the homepage, where WordPress also
    marks the in-page anchor links (#shop) as current. */
 @media (min-width: 768px) {
-	body:not(.home) .bms-bar .hfe-nav-menu__layout-horizontal .current-menu-item > a.hfe-menu-item {
+	body:not(.home) .bms-bar .hfe-nav-menu li.current-menu-item > a,
+	body:not(.home) .bms-bar .hfe-nav-menu li.current_page_item > a {
 		color: #3D5A99 !important;
 		box-shadow: inset 0 -1px 0 #3D5A99;
 	}

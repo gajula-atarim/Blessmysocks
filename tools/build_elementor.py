@@ -575,7 +575,8 @@ def about_hero():
                # The design's fade into the page colour across the lower half, as an editable background overlay.
                background_overlay_background='gradient', background_overlay_gradient_type='linear', background_overlay_color='rgba(244,243,241,0)',
                background_overlay_color_stop=px(45, '%'), background_overlay_color_b=BG,
-               background_overlay_color_b_stop=px(100, '%'), background_overlay_gradient_angle=px(180, 'deg'))
+               background_overlay_color_b_stop=px(100, '%'), background_overlay_gradient_angle=px(180, 'deg'),
+               background_overlay_opacity=px(1, ''))  # Elementor defaults overlays to 50% opacity
 
 
 def about_values():
