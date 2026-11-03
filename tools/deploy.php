@@ -32,8 +32,12 @@ foreach ( [ 'functions.php', 'inc/store.php', 'inc/shop.php', 'woocommerce/conte
 }
 $log['theme'] = 'ok';
 
-// 1a. Product catalogue (names, prices, sizes, photos) to match the Shop and Product designs.
-eval( '?>' . $get( 'tools/catalog.php' ) );
+// 1a. Product catalogue (names, prices, sizes, photos) to match the Shop and Product designs. Runs once: after
+// that, products are managed in WooCommerce and later deploys must not overwrite the shop owner's edits.
+if ( ! get_option( 'bms_catalog_done' ) ) {
+	eval( '?>' . $get( 'tools/catalog.php' ) );
+	update_option( 'bms_catalog_done', gmdate( 'c' ), false );
+}
 
 // 1b. Lighter images (WebP) and cloud video; fills $asset_urls (old file URL => new) for the Elementor data below.
 eval( '?>' . $get( 'tools/optimize.php' ) );
