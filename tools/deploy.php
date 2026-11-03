@@ -34,6 +34,9 @@ $log['theme'] = 'ok';
 
 // 1b. Contact Form 7 (the Contact page form), installed from wordpress.org if missing.
 if ( ! file_exists( WP_PLUGIN_DIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	require_once ABSPATH . 'wp-admin/includes/misc.php';
+	require_once ABSPATH . 'wp-admin/includes/plugin.php';
 	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 	require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 	$api = plugins_api( 'plugin_information', [ 'slug' => 'contact-form-7', 'fields' => [ 'sections' => false ] ] );
@@ -45,8 +48,8 @@ if ( ! file_exists( WP_PLUGIN_DIR . '/contact-form-7/wp-contact-form-7.php' ) ) 
 		throw new Exception( 'CF7 install failed' );
 	}
 }
+require_once ABSPATH . 'wp-admin/includes/plugin.php';
 if ( ! is_plugin_active( 'contact-form-7/wp-contact-form-7.php' ) ) {
-	require_once ABSPATH . 'wp-admin/includes/plugin.php';
 	$act = activate_plugin( 'contact-form-7/wp-contact-form-7.php' );
 	if ( is_wp_error( $act ) ) {
 		throw new Exception( 'CF7: ' . $act->get_error_message() );
