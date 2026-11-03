@@ -546,7 +546,7 @@ def home():
 
 # ---------------------------------------------------------------- about page
 
-def about_split(eyebrow_text, title, text, image_name, image_first):
+def about_split(eyebrow_text, title, text, image_name, image_first, **extra):
     """Story / craft rows: a 4:5 photo beside a short text block (stacked on phones, text first for the craft row)."""
     text_col = col([eyebrow(eyebrow_text, size=10), h2(title, 'clamp(30px,3.4vw,42px)', 1.1),
                     para(text, 14, MUTED, 1.75)], g=18, width=px(420), width_tablet=custom('100%'),
@@ -558,7 +558,7 @@ def about_split(eyebrow_text, title, text, image_name, image_first):
                  grid_gaps={'unit': 'px', 'column': '88', 'row': '32', 'isLinked': False},
                  grid_gaps_tablet={'unit': 'px', 'column': '48', 'row': '32', 'isLinked': False},
                  grid_gaps_mobile={'unit': 'px', 'column': '0', 'row': '32', 'isLinked': False},
-                 grid_align_items='center')
+                 grid_align_items='center', **extra)
 
 
 def about_hero():
@@ -570,6 +570,7 @@ def about_hero():
         padding_tablet=dims(24, 24, 48, 24), padding_mobile=dims(24, 24, 40, 24), css_classes='bms-about-hero-content')
     # Height is set in bms.css (.bms-about-hero): clamp(420px, 62vh, 600px) as in the design.
     return con([content], css_classes='bms-about-hero', position='relative', overflow='hidden', min_height=px(420),
+               min_height_mobile=px(0),
                flex_justify_content='flex-end', background_background='video', background_video_link=UP + 'hero-video.mp4',
                background_video_fallback=img('hero-poster.jpg'), background_play_on_mobile='yes',
                # The design's fade into the page colour across the lower half, as an editable background overlay.
@@ -627,7 +628,9 @@ def about():
         about_hero(),
         about_split('Our story', 'Made for comfort.<br>Blessed with purpose.',
                     'Bless My Socks began with a wish to make everyday clothes that remind us we’re loved. Laura’s story '
-                    'goes here: where the idea came from and what she hopes each pair brings.', 'pastel-cream.png', True),
+                    'goes here: where the idea came from and what she hopes each pair brings.', 'pastel-cream.png', True,
+                    # Phones: the shorter hero already ends in a soft fade, so the story starts closer beneath it.
+                    padding_mobile=dims(40, 16, 0, 16)),
         about_split('How we make them', 'Knitted, not printed.',
                     'Every message is knitted into the sock, so it lasts wash after wash. Soft ribbed cuffs, reinforced '
                     'heels and toes, and every pair checked before it leaves us.', 'pastel-blush.png', False),
