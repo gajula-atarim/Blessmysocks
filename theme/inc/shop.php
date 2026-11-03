@@ -96,6 +96,12 @@ function bms_dots( $product ) {
 	return $out;
 }
 
+/** Position of the next visible Shop card (0, 1, 2…); counts once per request. */
+function bms_next_card_index() {
+	static $i = 0;
+	return $i++;
+}
+
 /** A product card (Shop grid and "Pairs well with"). First-row Shop photos load straight away; the rest lazily. */
 function bms_card( $product, $eager = false ) {
 	$info = bms_product_info( $product );
@@ -104,7 +110,7 @@ function bms_card( $product, $eager = false ) {
 	?>
 	<div class="bms-card__media">
 		<a href="<?php echo $link; // phpcs:ignore WordPress.Security.EscapeOutput ?>" tabindex="-1" aria-hidden="true">
-			<?php echo wp_get_attachment_image( $product->get_image_id(), 'woocommerce_single', false, [ 'alt' => $product->get_name(), 'loading' => $eager ? 'eager' : 'lazy', 'fetchpriority' => $eager ? 'high' : 'auto', 'sizes' => '(max-width: 600px) 100vw, 240px' ] ); ?>
+			<?php echo wp_get_attachment_image( $product->get_image_id(), 'woocommerce_single', false, [ 'alt' => $product->get_name(), 'loading' => $eager ? 'eager' : 'lazy', 'sizes' => '(max-width: 600px) 100vw, 240px' ] ); ?>
 		</a>
 		<?php if ( $info['tag'] ) : ?><span class="bms-card__tag"><?php echo esc_html( $info['tag'] ); ?></span><?php endif; ?>
 	</div>
