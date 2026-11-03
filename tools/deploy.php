@@ -22,7 +22,7 @@ $log = [];
 
 // 1. Child theme files.
 $dir = get_stylesheet_directory();
-foreach ( [ 'functions.php', 'inc/store.php', 'inc/shop.php', 'woocommerce/content-product.php', 'assets/bms.css', 'assets/bms.js' ] as $f ) {
+foreach ( [ 'functions.php', 'inc/store.php', 'inc/shop.php', 'inc/checkout.php', 'woocommerce/content-product.php', 'assets/bms.css', 'assets/bms.js' ] as $f ) {
 	wp_mkdir_p( dirname( "$dir/$f" ) );
 	file_put_contents( "$dir/$f", $get( "theme/$f" ) );
 	// Without this, OPcache can keep serving the previous PHP until it revalidates.

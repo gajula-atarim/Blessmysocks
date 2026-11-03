@@ -47,3 +47,4 @@ add_filter( 'wpcf7_autop_or_not', '__return_false' );
 
 require_once get_stylesheet_directory() . '/inc/store.php';
 require_once get_stylesheet_directory() . '/inc/shop.php';
+require_once get_stylesheet_directory() . '/inc/checkout.php';
