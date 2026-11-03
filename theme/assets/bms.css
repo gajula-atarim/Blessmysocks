@@ -577,3 +577,53 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, in
 		box-shadow: inset 0 -1px 0 #3D5A99;
 	}
 }
+
+/* ---------- FAQ (support) page ---------- */
+[id="size"], [id="materials"], [id="faq"], [id="contact"] { scroll-margin-top: 120px; }
+/* Side menu and content: 170px menu beside a column that wraps underneath once it would drop below 520px. */
+.bms-faq .bms-faq-nav { flex: 0 0 170px !important; position: sticky; top: 112px; }
+.bms-faq .bms-faq-main { flex: 1 1 520px !important; min-width: 0; }
+@media (max-width: 767px) { .bms-faq .bms-faq-nav { position: static; } }
+.bms-faq-link a:hover, .bms-faq-section .elementor-heading-title a:hover { color: #3D5A99; }
+/* Tables keep their columns and scroll sideways on narrow screens. */
+.bms-table { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.bms-table > .bms-table-inner, .bms-table > .e-con-inner > .bms-table-inner { min-width: 520px; }
+/* Accordion rows: a hairline under each question (under its answer when open). */
+.bms-faq-acc .e-n-accordion-item { border-bottom: 1px solid #D9D5CE; }
+.bms-faq-acc .e-n-accordion-item-title { min-height: 48px; box-sizing: border-box; align-items: center; }
+.bms-faq-acc .e-n-accordion-item-title-text { text-align: left; }
+
+/* ---------- Contact page: Contact Form 7 ---------- */
+.bms-cf7 .wpcf7 form { display: flex; flex-direction: column; gap: 16px; }
+.bms-cf7 .bms-cf-fields { display: flex; flex-direction: column; gap: 16px; }
+.bms-cf7 .bms-cf-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 16px; }
+.bms-cf7 label { display: flex; flex-direction: column; gap: 6px; margin: 0; }
+.bms-cf7 label > span:first-child { font-size: 12px; color: #5F636B; }
+.bms-cf7 .wpcf7-form-control-wrap { display: block; }
+.bms-cf7 input[type="text"], .bms-cf7 input[type="email"], .bms-cf7 select, .bms-cf7 textarea {
+	width: 100%; box-sizing: border-box; background: #FFFFFF; border: 1px solid #D9D5CE; border-radius: 6px;
+	padding: 12px 14px; min-height: 46px; font-family: 'Jost', sans-serif; font-size: 14px; color: #1E222A; outline: none;
+}
+.bms-cf7 select { cursor: pointer; }
+.bms-cf7 textarea { resize: vertical; line-height: 1.6; height: auto; }
+.bms-cf7 input:focus, .bms-cf7 select:focus, .bms-cf7 textarea:focus { border-color: #1E222A; }
+.bms-cf7 input[type="submit"] {
+	width: 100%; font-family: 'Jost', sans-serif; font-size: 15px; font-weight: 500; background: #1E222A; color: #FFFFFF;
+	border: 0; border-radius: 999px; padding: 16px 28px; min-height: 54px; cursor: pointer; transition: none;
+}
+.bms-cf7 input[type="submit"]:hover, .bms-cf7 input[type="submit"]:focus { background: #3D5A99; color: #FFFFFF; }
+.bms-cf7 .wpcf7-spinner { display: none; }
+.bms-cf7 .wpcf7-not-valid-tip { font-size: 12px; color: #A23B36; margin-top: 4px; }
+.bms-cf7 .wpcf7 form .wpcf7-response-output { margin: 0; padding: 0; border: 0; font-size: 13px; color: #A23B36; }
+.bms-cf7 .wpcf7 form.sent .wpcf7-response-output { display: none; }
+/* After sending, the fields give way to the thank-you note, as in the design. */
+.bms-cf7 .bms-cf-thanks { display: none; flex-direction: column; gap: 14px; align-items: flex-start; padding: 24px 0; }
+.bms-cf7 .wpcf7 form.sent .bms-cf-fields { display: none; }
+.bms-cf7 .wpcf7 form.sent .bms-cf-thanks { display: flex; }
+.bms-cf7 .bms-cf-thanks-title { font-weight: 300; font-size: 32px; line-height: 1.2; }
+.bms-cf7 .bms-cf-thanks-text { font-size: 15px; line-height: 1.6; color: #5F636B; }
+.bms-cf7 .bms-cf-again {
+	font-family: 'Jost', sans-serif; font-size: 13px; font-weight: 500; background: transparent; color: #1E222A;
+	border: 1px solid #1E222A; border-radius: 999px; padding: 11px 20px; cursor: pointer;
+}
+.bms-cf7 .bms-cf-again:hover { background: #1E222A; color: #FFFFFF; }

@@ -3,7 +3,7 @@
 Every element is a native Elementor container or widget (no HTML/shortcode widgets),
 so the whole page stays editable in the Elementor panel.
 
-Usage: python3 tools/build_elementor.py  -> writes elementor/{home,about,header,footer}.json
+Usage: python3 tools/build_elementor.py  -> writes elementor/{home,about,faq,contact,header,footer}.json
 """
 import hashlib
 import json
@@ -618,7 +618,7 @@ def about_verse():
 def about_cta():
     return boxed([
         h2('Find your pair.', 'clamp(32px,3.6vw,44px)', 1.05, align='center'),
-        row([button('Shop the range', SITE + '/shop/'), button('Get in touch', '#', 'outline')], 'center', g=10),
+        row([button('Shop the range', SITE + '/shop/'), button('Get in touch', SITE + '/contact/', 'outline')], 'center', g=10),
     ], pad_top=112, pad_bottom=112, flex_gap=gap(20), flex_align_items='center')
 
 
@@ -632,6 +632,208 @@ def about():
                     'Every message is knitted into the sock, so it lasts wash after wash. Soft ribbed cuffs, reinforced '
                     'heels and toes, and every pair checked before it leaves us.', 'pastel-blush.png', False),
         about_values(), about_verse(), about_cta())]
+
+
+# ---------------------------------------------------------------- FAQ (support) page
+
+LINE2, BODY2 = '#D9D5CE', '#3A3F48'
+
+
+def micro(text, color=MUTED, ls=0.2, **kw):
+    """The design's 9px uppercase labels (table headers, card kickers)."""
+    return heading(text, 9, 'span', '500', color, ls=ls, transform='uppercase', **kw)
+
+
+def info_card(kicker, title, text, pad=16, title_size=13, title_url=None):
+    return col([micro(kicker), heading(title, title_size, 'span', '400', INK, url=title_url),
+                heading(text, 12, 'span', '400', MUTED, lh=1.65)], g=6, padding=dims(pad),
+               background_background='classic', background_color='#FFFFFF', border_border='solid',
+               border_width=dims(1), border_color=LINE2, border_radius=dims(8))
+
+
+def card_grid(cards, minw=180):
+    # Same auto-fit rule as the design: as many columns as fit at 180px (240px for the contact cards).
+    tpl = custom('repeat(auto-fit,minmax(min(100%%,%dpx),1fr))' % minw)
+    return grid(cards, 3, g=10, grid_columns_grid=tpl, grid_columns_grid_tablet=tpl, grid_columns_grid_mobile=tpl)
+
+
+def table(cols, head, rows):
+    """A simple table from grid rows of heading widgets; scrolls sideways on phones like the design."""
+    tpl = custom(cols)
+
+    def tr(cells, header=False):
+        if header:
+            items = [micro(c) for c in cells]
+        else:
+            items = [heading(c, 12, 'span', '500' if i == 0 else '400', INK if i == 0 else BODY2, lh=1.55)
+                     for i, c in enumerate(cells)]
+        return grid(items, 1, g=12, grid_columns_grid=tpl, grid_columns_grid_tablet=tpl, grid_columns_grid_mobile=tpl,
+                    padding=dims(8 if header else 12, 0), border_border='solid', border_width=dims(0, 0, 1, 0),
+                    border_color=INK if header else LINE2)
+
+    return con([con([tr(head, True)] + [tr(r) for r in rows], css_classes='bms-table-inner')],
+               css_classes='bms-table')
+
+
+def faq_section(anchor, title, children):
+    return col([heading(title, 'clamp(26px,2.8vw,32px)', 'h2', '300', INK, ls=-0.01)] + children, g=22,
+               padding=dims(40, 0, 0, 0), border_border='solid', border_width=dims(1, 0, 0, 0), border_color=LINE2,
+               _element_id=anchor, css_classes='bms-faq-section')
+
+
+def faq_text(html, size=13, color=INK):
+    return para(html, size, color, 1.7, maxw=600, _element_width_mobile='inherit')
+
+
+def accordion(items, expanded):
+    """Native Elementor (nested) accordion: one question open at a time, opening instantly like the design."""
+    children = [{'id': rid(), 'elType': 'container', 'isInner': True, 'settings': {
+        'content_width': 'full', 'flex_direction': 'column', 'flex_gap': gap(0), 'padding': dims(0, 0, 16, 0)},
+        'elements': [para(a, 12, MUTED, 1.7, maxw=560, _element_width_mobile='inherit')]} for _, a in items]
+    w = widget('nested-accordion',
+               items=[{'_id': rid(), 'item_title': q, 'element_css_id': ''} for q, _ in items],
+               accordion_item_title_position_horizontal='stretch', accordion_item_title_icon_position='end',
+               accordion_item_title_icon={'value': 'fas fa-plus', 'library': 'fa-solid'},
+               accordion_item_title_icon_active={'value': 'fas fa-minus', 'library': 'fa-solid'},
+               title_tag='div', default_state='expanded' if expanded else 'all_collapsed', max_items_expended='one',
+               n_accordion_animation_duration=px(0, 'ms'),
+               accordion_padding=dims(14, 0), accordion_border_radius=dims(0),
+               accordion_background_normal_background='classic', accordion_background_normal_color='rgba(0,0,0,0)',
+               accordion_background_hover_background='classic', accordion_background_hover_color='rgba(0,0,0,0)',
+               accordion_background_active_background='classic', accordion_background_active_color='rgba(0,0,0,0)',
+               accordion_border_normal_border='none', accordion_border_hover_border='none',
+               accordion_border_active_border='none', content_border_border='none', content_padding=dims(0, 0, 16, 0),
+               **typo('title', 13, '400', lh=1.45),
+               normal_title_color=INK, hover_title_color=BLUE, active_title_color=INK,
+               normal_icon_color=INK, hover_icon_color=BLUE, active_icon_color=INK, icon_size=px(11),
+               _css_classes='bms-faq-acc')
+    w['elements'] = children
+    return w
+
+
+FAQS = [
+    ('Orders &amp; payment', [
+        ('Which payment methods do you accept?', 'PayPal, Visa, Mastercard, Apple Pay and Google Pay, all through a secure checkout.'),
+        ('Do I need an account to order?', 'No. You can check out as a guest with just your email and delivery address.'),
+        ('Can I change or cancel my order?', 'Email us as soon as possible. If your order hasn’t been packed yet, we’ll happily change or cancel it.'),
+        ('Can I add a gift note?', 'Yes. Add a note at checkout and we’ll include it, handwritten, in the parcel.')]),
+    ('Products', [
+        ('Are your socks unisex?', 'Yes. Choose by foot length using the size guide above.'),
+        ('Do the messages fade?', 'No. They’re knitted into the sock, not printed, so they last wash after wash.'),
+        ('Do you take bulk orders for churches or groups?', 'Yes. Get in touch and we’ll put together an order for you.')]),
+    ('Shipping &amp; returns', [
+        ('How do I track my parcel?', 'A tracking link is emailed to you as soon as your parcel leaves us.'),
+        ('My parcel says delivered but I don’t have it', 'Check with neighbours and your local post office first, then email us and we’ll help sort it out.'),
+        ('Can I return socks I’ve worn?', 'Worn socks can’t be returned for change of mind, but faulty pairs are always replaced.')]),
+]
+
+
+def faq():
+    nav = col([heading(t, 12, 'span', '400', INK, url='#' + a, _padding=dims(10, 0), _border_border='solid',
+                       _border_width=dims(0, 0, 1, 0), _border_color=LINE2, _css_classes='bms-faq-link')
+               for t, a in [('Size &amp; fit', 'size'), ('Materials &amp; care', 'materials'), ('Shipping', 'shipping'),
+                            ('Returns &amp; exchanges', 'returns'), ('FAQ', 'faq'), ('Contact', 'contact')]],
+              width=px(170), width_tablet=px(170), width_mobile=px(170), css_classes='bms-faq-nav',
+              _flex_align_self='flex-start')
+    step = lambda n, t, d: grid([heading(n, 15, 'span', '300', BLUE),
+                                 col([heading(t, 13, 'span', '400', INK), heading(d, 12, 'span', '400', MUTED, lh=1.6)], g=4)],
+                                1, g=12, grid_columns_grid=custom('40px 1fr'), grid_columns_grid_tablet=custom('40px 1fr'),
+                                grid_columns_grid_mobile=custom('40px 1fr'), padding=dims(14, 0), border_border='solid',
+                                border_width=dims(0, 0, 1, 0), border_color=LINE2)
+    main = col([
+        col([eyebrow('Support', size=10, ls=0.26), heading('How can we help?', 'clamp(38px,4.6vw,56px)', 'h1', '300', INK,
+                                                         ls=-0.02, lh=1),
+             heading('Everything about fit, fabric, delivery and returns in one place.', 14, 'p', '400', INK)], g=14),
+        faq_section('size', 'Size &amp; fit', [
+            faq_text('Our socks come in three sizes, knitted with a little stretch so they hug the foot and keep their shape '
+                     'wash after wash. Tees are a relaxed unisex fit.'),
+            table('1.2fr 1fr 1fr 1fr', ['Size', 'AU', 'EU', 'Foot length'],
+                  [['Small', 'AU 4–7', 'EU 35–38', '22–24 cm'], ['Medium', 'AU 7–11', 'EU 38–42', '24–26.5 cm'],
+                   ['Large', 'AU 11–14', 'EU 42–46', '26.5–29 cm']]),
+            card_grid([info_card('Height', 'Crew height', 'The cuff sits above the ankle and below the calf, and stays put without pinching.'),
+                       info_card('Between sizes?', 'Measure your foot', 'Measure heel to longest toe and use the foot-length column. If you’re between sizes, size up.'),
+                       info_card('Tees', 'Relaxed unisex fit', 'Choose your usual size, or size down for a closer fit. Sizes XS to XL.')]),
+        ]),
+        faq_section('materials', 'Materials &amp; care', [
+            card_grid([info_card('Yarn', 'Cotton-rich blend', 'Soft, breathable cotton with a little stretch for comfort and recovery.'),
+                       info_card('Construction', 'Knitted, not printed', 'Messages and motifs are knitted into the fabric, so they soften with the sock instead of fading.'),
+                       info_card('Finish', 'Reinforced heel &amp; toe', 'Extra strength where socks wear first, so every pair lasts longer.')]),
+            micro('Care instructions', ls=0.22, _margin=dims(8, 0, 0, 0)),
+            table('90px 1fr', ['Care', 'Instructions'], [
+                ['Wash', 'Machine wash cold on a gentle cycle with like colours. Turn inside out first to protect the knitted messages.'],
+                ['Dry', 'Line dry in the shade or dry flat. Skip the tumble dryer.'],
+                ['Avoid', 'No bleach, no fabric softener, no ironing.'],
+                ['Expect', 'Cotton softens over the first few washes. A little surface fluff early on is normal and washes out.']]),
+        ]),
+        faq_section('shipping', 'Shipping', [
+            faq_text('Every order is packed by hand in Australia and sent with Australia Post within one to two business days, with tracking.'),
+            card_grid([info_card('Australia', 'Standard · A$9.95', '2–7 business days, tracked.'),
+                       info_card('Australia', 'Express · A$14.95', '1–3 business days, tracked.'),
+                       info_card('International', 'Calculated at checkout', 'Available countries and costs are shown at checkout.')]),
+            table('1.6fr 1fr 1fr', ['Destination', 'Transit', 'Service'], [
+                ['Metro areas', '2–5 days', 'Standard'], ['Regional', '4–7 days', 'Standard'], ['Remote', '6–10 days', 'Standard'],
+                ['New Zealand', '5–10 days', 'International'], ['Rest of world', '7–15 days', 'International']]),
+            faq_text('Estimates are business days after dispatch. International orders may attract local import duties or taxes, '
+                     'payable by the recipient.', 11, MUTED),
+        ]),
+        faq_section('returns', 'Returns &amp; exchanges', [
+            faq_text('Nothing in this policy limits your rights under the Australian Consumer Law. Our 30-day promise is an extra '
+                     'benefit on top of them.'),
+            card_grid([info_card('Faulty pair', 'Free replacement', 'Email us within 30 days with your order number and a photo. We’ll send a new pair at no cost.'),
+                       info_card('Change of mind', 'Exchange unworn pairs', 'Email us within 30 days to swap for another colour or size. You cover return postage; we cover the replacement.'),
+                       info_card('Worn socks', 'Hygiene restriction', 'For hygiene reasons, worn socks can’t be returned or exchanged for change of mind.')]),
+            micro('How to start a return or exchange', ls=0.22, _margin=dims(8, 0, 0, 0)),
+            col([step('01', 'Email us', 'Write to hello@blessmysocks.com with your order number, the item and a photo if it’s faulty.'),
+                 step('02', 'We reply', 'Within one to two business days, with the return address for exchanges.'),
+                 step('03', 'Replacement ships', 'Faulty pairs are re-sent straight away. Exchanges ship once your parcel reaches us.')]),
+        ]),
+        faq_section('faq', 'FAQ', [col([micro(t, ls=0.22, _padding=dims(0, 0, 6, 0)), accordion(items, i == 0)])
+                                   for i, (t, items) in enumerate(FAQS)]),
+        faq_section('contact', 'Contact', [
+            card_grid([info_card('Email', 'hello@blessmysocks.com', 'Replies within one to two business days. Include your order '
+                                 'number for anything about an existing order.', 18, 14, 'mailto:hello@blessmysocks.com'),
+                       info_card('Based in', 'Bless My Socks · Australia', 'Bulk and church orders are welcome. Mention “bulk” in '
+                                 'your subject line.', 18, 14)], 240),
+            button('Send us a message →', SITE + '/contact/', 'dark', 13, (12, 22), _flex_align_self='flex-start'),
+        ]),
+    ], g=48, width=custom('auto'), width_mobile=custom('auto'), css_classes='bms-faq-main')
+    return [mark_inner(boxed([nav, main], width=1080, pad_top=64, pad_bottom=112, flex_direction='row',
+                             flex_wrap='wrap', flex_gap=gap(72), flex_gap_tablet=gap(48), flex_gap_mobile=gap(32),
+                             flex_align_items='flex-start', css_classes='bms-faq'))]
+
+
+# ---------------------------------------------------------------- Contact page
+
+def contact():
+    def info_row(label, value, url=None):
+        return row([heading(label, 14, 'span', '400', MUTED), heading(value, 14, 'span', '400', INK, url=url)],
+                   g=16, wrap='nowrap', padding=dims(16, 0), border_border='solid', border_width=dims(0, 0, 1, 0),
+                   border_color=LINE2)
+
+    left = col([
+        eyebrow('Contact'),
+        heading('Get in <em style="color:#3D5A99">touch.</em>', 'clamp(40px,5vw,64px)', 'h1', '300', INK, ls=-0.02, lh=1),
+        para('Questions about an order, sizing or bulk orders for your church? Send us a message.', 15, MUTED, 1.7, maxw=420,
+             _element_width_mobile='inherit'),
+        col([info_row('Email', 'hello@blessmysocks.com', 'mailto:hello@blessmysocks.com'),
+             info_row('Replies', 'Within 1–2 business days'), info_row('Based in', 'Australia')],
+            border_border='solid', border_width=dims(1, 0, 0, 0), border_color=LINE2, margin=dims(8, 0, 0, 0),
+            width=px(420), width_tablet=custom('100%'), width_mobile=custom('100%'), css_classes='bms-contact-info'),
+        button('Read the FAQ →', SITE + '/faq/', 'outline', 13, (12, 22), background_color='rgba(0,0,0,0)',
+               _flex_align_self='flex-start', _margin=dims(8, 0, 0, 0)),
+    ], g=20)
+    # Contact Form 7 form (Contact → Contact Forms in WordPress). CF7 has no Elementor widget, so it sits in
+    # Elementor's Shortcode widget; deploy.php fills in the form's shortcode. Field styles live in bms.css.
+    form = col([widget('shortcode', shortcode='CF7_CONTACT', _css_classes='bms-cf7')],
+               background_background='classic', background_color='#FFFFFF', border_border='solid', border_width=dims(1),
+               border_color=LINE, border_radius=dims(6), padding=dims(36), padding_tablet=dims(28), padding_mobile=dims(22))
+    tpl = custom('repeat(auto-fit,minmax(min(100%,360px),1fr))')
+    return [mark_inner(boxed([left, form], pad_top=88, pad_bottom=112, container_type='grid', grid_columns_grid=tpl,
+                             grid_columns_grid_tablet=tpl, grid_columns_grid_mobile=tpl, grid_rows_grid=px(1, 'fr'),
+                             grid_gaps={'unit': 'px', 'column': '72', 'row': '32', 'isLinked': False},
+                             grid_gaps_tablet={'unit': 'px', 'column': '40', 'row': '32', 'isLinked': False},
+                             grid_gaps_mobile={'unit': 'px', 'column': '0', 'row': '32', 'isLinked': False},
+                             grid_align_items='start'))]
 
 
 # ---------------------------------------------------------------- UAE header & footer
@@ -726,7 +928,7 @@ if __name__ == '__main__':
     os.makedirs(root, exist_ok=True)
     # Menu IDs are filled in on the server by tools/deploy.php.
     menus = {'primary': 'MENU_PRIMARY', 'shop': 'MENU_SHOP', 'help': 'MENU_HELP', 'company': 'MENU_COMPANY'}
-    for name, data in (('home', home()), ('about', about()), ('header', header(menus['primary'])), ('footer', footer(menus))):
+    for name, data in (('home', home()), ('about', about()), ('faq', faq()), ('contact', contact()), ('header', header(menus['primary'])), ('footer', footer(menus))):
         with open(os.path.join(root, name + '.json'), 'w') as fh:
             json.dump(data, fh, ensure_ascii=False, separators=(',', ':'))
         print(name, len(json.dumps(data)))

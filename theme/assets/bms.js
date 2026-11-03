@@ -3,6 +3,8 @@
  * - Cart drawer backed by the WooCommerce Store API (add, +/-, totals).
  * - "Add +" buttons (links containing ?add-to-cart=ID) add without a page load.
  * - Collection strip arrows and the delivery-region tabs.
+ * - FAQ: one question open at a time across all the accordion groups.
+ * - Contact form: personal thank-you note and "Send another message".
  */
 (function () {
 	'use strict';
@@ -170,4 +172,43 @@
 		pickRegion(a.getAttribute('href').slice(1));
 	});
 	if (document.querySelector('.bms-tab')) { pickRegion('au'); }
+	// FAQ accordions: like the design, opening a question closes the open one in any other group.
+	document.addEventListener('click', function (e) {
+		var summary = e.target.closest('.bms-faq-acc .e-n-accordion-item-title');
+		if (!summary) { return; }
+		var item = summary.parentElement;
+		var widget = summary.closest('.bms-faq-acc');
+		document.querySelectorAll('.bms-faq-acc details[open]').forEach(function (d) {
+			if (d === item || widget.contains(d)) { return; }
+			d.removeAttribute('open');
+			var s = d.querySelector('.e-n-accordion-item-title');
+			if (s) { s.setAttribute('aria-expanded', 'false'); }
+		});
+	});
+
+	// Contact Form 7: "Thank you, <first name>." and the reply address, then a way back to the form.
+	document.addEventListener('wpcf7mailsent', function (e) {
+		var form = e.target.querySelector ? e.target.querySelector('form') || e.target : e.target;
+		var vals = {};
+		((e.detail && e.detail.inputs) || []).forEach(function (i) { vals[i.name] = i.value; });
+		var first = (vals['your-name'] || '').trim().split(/\s+/)[0];
+		var t = form.querySelector('.bms-cf-thanks-title');
+		var p = form.querySelector('.bms-cf-thanks-text');
+		if (t) { t.textContent = first ? 'Thank you, ' + first + '.' : 'Thank you.'; }
+		if (p && vals['your-email']) {
+			p.textContent = 'Your message is on its way. We’ll reply to ' + vals['your-email'] + ' within one to two business days.';
+		}
+	});
+	document.addEventListener('click', function (e) {
+		var again = e.target.closest('.bms-cf-again');
+		if (!again) { return; }
+		e.preventDefault();
+		var form = again.closest('form');
+		form.classList.remove('sent');
+		form.classList.add('init');
+		form.setAttribute('data-status', 'init');
+		form.reset();
+		var first = form.querySelector('input[type="text"]');
+		if (first) { first.focus(); }
+	});
 })();

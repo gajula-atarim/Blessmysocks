@@ -29,4 +29,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	}
 }, 20 );
 
+// Contact Form 7: keep the form markup as written (no automatic <p>/<br> wrapping), so bms.css can lay it out.
+add_filter( 'wpcf7_autop_or_not', '__return_false' );
+
 require_once get_stylesheet_directory() . '/inc/store.php';

@@ -1,0 +1,15 @@
+<div class="bms-cf-fields">
+<div class="bms-cf-row">
+<label><span>Name *</span>[text* your-name autocomplete:name placeholder "Your name"]</label>
+<label><span>Email *</span>[email* your-email autocomplete:email placeholder "you@example.com"]</label>
+</div>
+<label><span>Topic</span>[select topic "An order" "Products & sizing" "Bulk or church orders" "Something else"]</label>
+<label><span>Order number (optional)</span>[text order-number placeholder "e.g. BMS-1024"]</label>
+<label><span>Message *</span>[textarea* your-message x6 placeholder "How can we help?"]</label>
+[submit "Send message"]
+</div>
+<div class="bms-cf-thanks">
+<span class="bms-cf-thanks-title">Thank you.</span>
+<span class="bms-cf-thanks-text">Your message is on its way. We’ll reply within one to two business days.</span>
+<button type="button" class="bms-cf-again">Send another message</button>
+</div>

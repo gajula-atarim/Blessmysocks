@@ -32,6 +32,74 @@ foreach ( [ 'functions.php', 'inc/store.php', 'assets/bms.css', 'assets/bms.js' 
 }
 $log['theme'] = 'ok';
 
+// 1b. Contact Form 7 (the Contact page form), installed from wordpress.org if missing.
+if ( ! file_exists( WP_PLUGIN_DIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
+	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+	require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+	$api = plugins_api( 'plugin_information', [ 'slug' => 'contact-form-7', 'fields' => [ 'sections' => false ] ] );
+	if ( is_wp_error( $api ) ) {
+		throw new Exception( 'CF7: ' . $api->get_error_message() );
+	}
+	$up = new Plugin_Upgrader( new Automatic_Upgrader_Skin() );
+	if ( true !== $up->install( $api->download_link ) ) {
+		throw new Exception( 'CF7 install failed' );
+	}
+}
+if ( ! is_plugin_active( 'contact-form-7/wp-contact-form-7.php' ) ) {
+	require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	$act = activate_plugin( 'contact-form-7/wp-contact-form-7.php' );
+	if ( is_wp_error( $act ) ) {
+		throw new Exception( 'CF7: ' . $act->get_error_message() );
+	}
+}
+if ( ! class_exists( 'WPCF7_ContactForm' ) ) {
+	include_once WP_PLUGIN_DIR . '/contact-form-7/wp-contact-form-7.php';
+	if ( function_exists( 'wpcf7_init' ) ) {
+		wpcf7_init(); // registers the form post type, which normally happens on 'init' (already past here)
+	}
+}
+$ids = get_option( 'bms_build_ids', [] );
+$cf  = ! empty( $ids['cf7'] ) ? wpcf7_contact_form( $ids['cf7'] ) : null;
+if ( ! $cf ) {
+	$cf = WPCF7_ContactForm::get_template();
+}
+$cf->set_title( 'BMS Contact' );
+$cf->set_properties( [
+	'form'     => $get( 'theme/cf7-contact-form.txt' ),
+	'mail'     => [
+		'active'             => true,
+		'subject'            => 'Bless My Socks contact: [topic] from [your-name]',
+		'sender'             => 'Bless My Socks <wordpress@' . wp_parse_url( home_url(), PHP_URL_HOST ) . '>',
+		'recipient'          => get_option( 'admin_email' ),
+		'body'               => "From: [your-name] <[your-email]>\nTopic: [topic]\nOrder number: [order-number]\n\n[your-message]\n\n-- \nSent from the contact form on " . home_url( '/contact/' ),
+		'additional_headers' => 'Reply-To: [your-email]',
+		'attachments'        => '',
+		'use_html'           => false,
+		'exclude_blank'      => false,
+	],
+	'messages' => [
+		'mail_sent_ok'     => 'Thank you. Your message is on its way.',
+		'mail_sent_ng'     => 'Sorry, your message could not be sent. Please email hello@blessmysocks.com.',
+		'validation_error' => 'Please add your name, a valid email and a message.',
+		'invalid_required' => 'Required.',
+		'invalid_email'    => 'Please enter a valid email address.',
+		'spam'             => 'Sorry, your message could not be sent. Please email hello@blessmysocks.com.',
+	] + $cf->prop( 'messages' ),
+] );
+$cf->save();
+$ids['cf7'] = $cf->id();
+$log['cf7'] = $cf->id();
+$cf7_shortcode = sprintf( '[contact-form-7 id="%s" title="BMS Contact"]', method_exists( $cf, 'hash' ) && $cf->hash() ? substr( $cf->hash(), 0, 7 ) : $cf->id() );
+
+// Page shells first, so the menus below can link to the pages themselves (see 'page:<slug>').
+foreach ( [ 'about' => 'About', 'faq' => 'FAQ', 'contact' => 'Contact' ] as $slug => $title ) {
+	if ( empty( $ids[ $slug ] ) || ! get_post( $ids[ $slug ] ) ) {
+		$found = get_page_by_path( $slug );
+		$ids[ $slug ] = $found ? $found->ID : wp_insert_post( [ 'post_type' => 'page', 'post_title' => $title, 'post_name' => $slug, 'post_status' => 'publish' ] );
+	}
+}
+update_option( 'bms_build_ids', $ids, false );
+
 // 2. Menus (UAE Navigation Menu widgets in the header/footer use these).
 $home = home_url( '/' );
 $menu = function ( $name, $items ) {
@@ -64,12 +132,13 @@ $menu = function ( $name, $items ) {
 	}
 	return $id;
 };
+$faq   = home_url( '/faq/' );
 $cat   = function ( $slug ) { return home_url( '/product-category/' . $slug . '/' ); };
 $menus = [
-	'MENU_PRIMARY' => $menu( 'BMS Primary', [ [ 'Shop', $home . '#shop' ], [ 'About', 'page:about' ], [ 'FAQ', '#' ], [ 'Contact', '#' ] ] ),
-	'MENU_SHOP'    => $menu( 'BMS Footer Shop', [ [ 'Socks', home_url( '/shop/' ) ], [ 'T-shirts', $cat( 'gifts-tees' ) ], [ 'Gifts & more', $cat( 'gifts-tees' ) ] ] ),
-	'MENU_HELP'    => $menu( 'BMS Footer Help', [ [ 'Size & fit', '#' ], [ 'Shipping', $home . '#shipping' ], [ 'Returns & exchanges', $home . '#returns' ], [ 'FAQ', '#' ], [ 'Contact', '#' ] ] ),
-	'MENU_COMPANY' => $menu( 'BMS Footer Company', [ [ 'About', 'page:about' ], [ 'Privacy', '#' ], [ 'Terms', '#' ] ] ),
+	'MENU_PRIMARY' => $menu( 'BMS Primary', [ [ 'Shop', $home . '#shop' ], [ 'About', 'page:about' ], [ 'FAQ', 'page:faq' ], [ 'Contact', 'page:contact' ] ] ),
+	'MENU_SHOP'    => $menu( 'BMS Footer Shop', [ [ 'Socks', home_url( '/shop/' ) ], [ 'T-shirts', $cat( 'gifts-tees' ) ], [ 'Gifts & more', $cat( 'gifts-tees' ) ], [ 'Shop all', home_url( '/shop/' ) ] ] ),
+	'MENU_HELP'    => $menu( 'BMS Footer Help', [ [ 'Size & fit', $faq . '#size' ], [ 'Materials & care', $faq . '#materials' ], [ 'Shipping', $faq . '#shipping' ], [ 'Returns & exchanges', $faq . '#returns' ], [ 'FAQ', $faq . '#faq' ], [ 'Contact', 'page:contact' ] ] ),
+	'MENU_COMPANY' => $menu( 'BMS Footer Company', [ [ 'About', 'page:about' ], [ 'Contact us', 'page:contact' ], [ 'Privacy', '#' ], [ 'Terms', '#' ] ] ),
 ];
 $log['menus'] = $menus;
 
@@ -130,8 +199,8 @@ if ( $kit ) {
 }
 
 // 4. Elementor documents.
-$json = function ( $name ) use ( $get, $menus ) {
-	return json_decode( strtr( $get( "elementor/$name.json" ), $menus ), true );
+$json = function ( $name ) use ( $get, $menus, $cf7_shortcode ) {
+	return json_decode( strtr( $get( "elementor/$name.json" ), $menus + [ 'CF7_CONTACT' => addslashes( $cf7_shortcode ) ] ), true );
 };
 $ids  = get_option( 'bms_build_ids', [] );
 $save = function ( $key, $args, $elements, $meta = [], $settings = [] ) use ( &$ids ) {
@@ -162,6 +231,11 @@ $log['home']   = $save( 'home', [ 'post_type' => 'page', 'post_title' => 'Home',
 $log['about']  = $save( 'about', [ 'post_type' => 'page', 'post_title' => 'About', 'post_name' => 'about' ], $json( 'about' ),
 	[ '_wp_page_template' => 'elementor_header_footer', '_elementor_template_type' => 'wp-page' ],
 	[ 'hide_title' => 'yes', 'template' => 'elementor_header_footer' ] );
+foreach ( [ 'faq' => 'FAQ', 'contact' => 'Contact' ] as $slug => $title ) {
+	$log[ $slug ] = $save( $slug, [ 'post_type' => 'page', 'post_title' => $title, 'post_name' => $slug ], $json( $slug ),
+		[ '_wp_page_template' => 'elementor_header_footer', '_elementor_template_type' => 'wp-page' ],
+		[ 'hide_title' => 'yes', 'template' => 'elementor_header_footer' ] );
+}
 update_option( 'bms_build_ids', $ids, false );
 
 update_option( 'show_on_front', 'page' );
