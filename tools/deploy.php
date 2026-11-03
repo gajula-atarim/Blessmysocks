@@ -45,22 +45,31 @@ $menu = function ( $name, $items ) {
 		$id = wp_create_nav_menu( $name );
 	}
 	foreach ( $items as $i => $it ) {
-		wp_update_nav_menu_item( $id, 0, [
+		$args = [
 			'menu-item-title'    => $it[0],
 			'menu-item-url'      => $it[1],
 			'menu-item-type'     => 'custom',
 			'menu-item-status'   => 'publish',
 			'menu-item-position' => $i + 1,
-		] );
+		];
+		// 'page:<slug>' links the item to the page itself, so WordPress marks it current on that page
+		// (custom links only match the exact URL, and fail with any query string).
+		if ( 0 === strpos( $it[1], 'page:' ) ) {
+			$page = get_page_by_path( substr( $it[1], 5 ) );
+			$args = $page
+				? [ 'menu-item-object-id' => $page->ID, 'menu-item-object' => 'page', 'menu-item-type' => 'post_type' ] + $args
+				: [ 'menu-item-url' => home_url( '/' . substr( $it[1], 5 ) . '/' ) ] + $args;
+		}
+		wp_update_nav_menu_item( $id, 0, $args );
 	}
 	return $id;
 };
 $cat   = function ( $slug ) { return home_url( '/product-category/' . $slug . '/' ); };
 $menus = [
-	'MENU_PRIMARY' => $menu( 'BMS Primary', [ [ 'Shop', $home . '#shop' ], [ 'About', home_url( '/about/' ) ], [ 'FAQ', '#' ], [ 'Contact', '#' ] ] ),
+	'MENU_PRIMARY' => $menu( 'BMS Primary', [ [ 'Shop', $home . '#shop' ], [ 'About', 'page:about' ], [ 'FAQ', '#' ], [ 'Contact', '#' ] ] ),
 	'MENU_SHOP'    => $menu( 'BMS Footer Shop', [ [ 'Socks', home_url( '/shop/' ) ], [ 'T-shirts', $cat( 'gifts-tees' ) ], [ 'Gifts & more', $cat( 'gifts-tees' ) ] ] ),
 	'MENU_HELP'    => $menu( 'BMS Footer Help', [ [ 'Size & fit', '#' ], [ 'Shipping', $home . '#shipping' ], [ 'Returns & exchanges', $home . '#returns' ], [ 'FAQ', '#' ], [ 'Contact', '#' ] ] ),
-	'MENU_COMPANY' => $menu( 'BMS Footer Company', [ [ 'About', home_url( '/about/' ) ], [ 'Privacy', '#' ], [ 'Terms', '#' ] ] ),
+	'MENU_COMPANY' => $menu( 'BMS Footer Company', [ [ 'About', 'page:about' ], [ 'Privacy', '#' ], [ 'Terms', '#' ] ] ),
 ];
 $log['menus'] = $menus;
 
