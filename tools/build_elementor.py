@@ -3,7 +3,7 @@
 Every element is a native Elementor container or widget (no HTML/shortcode widgets),
 so the whole page stays editable in the Elementor panel.
 
-Usage: python3 tools/build_elementor.py  -> writes elementor/{home,header,footer}.json
+Usage: python3 tools/build_elementor.py  -> writes elementor/{home,about,header,footer}.json
 """
 import hashlib
 import json
@@ -498,7 +498,7 @@ def story():
                  h2('Faith you can <em style="color:#A9B8D8">walk in.</em>', 'clamp(34px,4vw,52px)', 1.05, '#FFFFFF'),
                  para('Bless My Socks began with a simple idea: everyday clothes that remind us we’re loved. Laura’s words go here.',
                       15, '#C9CCD2', 1.65, _element_width_tablet='inherit', maxw=440),
-                 button('Read our story →', '#about', 'blue', 13, (12, 22))], g=20, flex_align_items='flex-start'),
+                 button('Read our story →', SITE + '/about/', 'blue', 13, (12, 22))], g=20, flex_align_items='flex-start'),
             grid([image('pastel-cream.png', 'medium_large', classes='bms-fill'),
                   image('bundle-1.png', 'medium_large', classes='bms-fill')], 2, 2, 2, 0,
                  border_radius=dims(6), overflow='hidden', background_background='classic', background_color='#EDEFE8',
@@ -542,6 +542,95 @@ def marquee():
 def home():
     return [mark_inner(s) for s in (hero(), collections(), bestsellers(), gallery(), bundle(), shipping(), story(),
                                     values(), marquee())]
+
+
+# ---------------------------------------------------------------- about page
+
+def about_split(eyebrow_text, title, text, image_name, image_first):
+    """Story / craft rows: a 4:5 photo beside a short text block (stacked on phones, text first for the craft row)."""
+    text_col = col([eyebrow(eyebrow_text, size=10), h2(title, 'clamp(30px,3.4vw,42px)', 1.1),
+                    para(text, 14, MUTED, 1.75)], g=18, width=px(420), width_tablet=custom('100%'),
+                    width_mobile=custom('100%'), css_classes='bms-about-text')
+    photo = image(image_name, 'medium_large', classes='bms-ar-45', radius=10)
+    return boxed([photo, text_col] if image_first else [text_col, photo], width=1080, pad_top=112,
+                 container_type='grid', grid_columns_grid=px(2, 'fr'), grid_columns_grid_tablet=px(2, 'fr'),
+                 grid_columns_grid_mobile=px(1, 'fr'), grid_rows_grid=px(1, 'fr'),
+                 grid_gaps={'unit': 'px', 'column': '88', 'row': '32', 'isLinked': False},
+                 grid_gaps_tablet={'unit': 'px', 'column': '48', 'row': '32', 'isLinked': False},
+                 grid_gaps_mobile={'unit': 'px', 'column': '0', 'row': '32', 'isLinked': False},
+                 grid_align_items='center')
+
+
+def about_hero():
+    content = col([
+        eyebrow('About us', align='center'),
+        heading('Faith you can<br><em style="color:#3D5A99">walk in.</em>', 'clamp(44px,6vw,80px)', 'h1', '300', INK,
+                align='center', ls=-0.02, lh=1),
+    ], g=18, flex_justify_content='flex-end', flex_align_items='center', padding=dims(24, 24, 64, 24),
+        padding_tablet=dims(24, 24, 48, 24), padding_mobile=dims(24, 24, 40, 24), css_classes='bms-about-hero-content')
+    # Height is set in bms.css (.bms-about-hero): clamp(420px, 62vh, 600px) as in the design.
+    return con([content], css_classes='bms-about-hero', position='relative', overflow='hidden', min_height=px(420),
+               flex_justify_content='flex-end', background_background='video', background_video_link=UP + 'hero-video.mp4',
+               background_video_fallback=img('hero-poster.jpg'), background_play_on_mobile='yes',
+               # The design's fade into the page colour across the lower half, as an editable background overlay.
+               background_overlay_background='gradient', background_overlay_color='rgba(244,243,241,0)',
+               background_overlay_color_stop=px(45, '%'), background_overlay_color_b=BG,
+               background_overlay_color_b_stop=px(100, '%'), background_overlay_gradient_angle=px(180, 'deg'))
+
+
+def about_values():
+    def cell(icon, title, text):
+        return col([widget('icon', selected_icon=icon, primary_color='#9AA0A8', size=px(18), align='left'),
+                    heading(title, 14, 'span', '400', INK), heading(text, 12, 'span', '400', MUTED, lh=1.65)],
+                   g=10, padding=dims(26))
+
+    return con([
+        boxed([
+            col([eyebrow('The details that matter', size=10, align='center'),
+                 h2('Comfort in every step.', 'clamp(32px,3.6vw,44px)', 1.08, align='center'),
+                 para('Soft cotton, a gentle message and a fit made for everyday wear.', 13, MUTED, 1.65, maxw=420,
+                      align='center')], g=14, flex_align_items='center'),
+            grid([cell({'value': 'far fa-heart', 'library': 'fa-regular'}, 'Made with care',
+                       'Every pair is checked by hand before it’s packed and sent.'),
+                  cell({'value': 'fas fa-grip-lines-vertical', 'library': 'fa-solid'}, 'Soft cotton blend',
+                       'Breathable and comfortable from morning to night.'),
+                  cell({'value': 'fas fa-cross', 'library': 'fa-solid'}, 'A quiet message',
+                       'Scripture and blessings knitted into every pair.')], 3, 3, 1, 0,
+                 background_background='classic', background_color=BG, border_border='solid', border_width=dims(1),
+                 border_color='#D9D5CE', border_radius=dims(10), css_classes='bms-values'),
+        ], width=1080, pad_top=96, pad_bottom=96, flex_gap=gap(40), flex_align_items='stretch'),
+    ], background_background='classic', background_color='#ECEAE6', margin=dims(120, 0, 0, 0),
+        margin_tablet=dims(90, 0, 0, 0), margin_mobile=dims(72, 0, 0, 0))
+
+
+def about_verse():
+    return con([
+        boxed([
+            eyebrow('Psalm 119:105', '#A9B8D8', align='center'),
+            heading('“Thy word is a lamp unto my feet, and a <em style="color:#A9B8D8">light unto my path.</em>”',
+                    'clamp(28px,3.6vw,44px)', 'p', '300', '#FFFFFF', align='center', ls=-0.01, lh=1.25,
+                    _css_classes='bms-balance'),
+        ], width=880, pad_top=104, pad_bottom=104, flex_gap=gap(22), flex_align_items='center'),
+    ], background_background='classic', background_color=INK)
+
+
+def about_cta():
+    return boxed([
+        h2('Find your pair.', 'clamp(32px,3.6vw,44px)', 1.05, align='center'),
+        row([button('Shop the range', SITE + '/shop/'), button('Get in touch', '#', 'outline')], 'center', g=10),
+    ], pad_top=112, pad_bottom=112, flex_gap=gap(20), flex_align_items='center')
+
+
+def about():
+    return [mark_inner(s) for s in (
+        about_hero(),
+        about_split('Our story', 'Made for comfort.<br>Blessed with purpose.',
+                    'Bless My Socks began with a wish to make everyday clothes that remind us we’re loved. Laura’s story '
+                    'goes here: where the idea came from and what she hopes each pair brings.', 'pastel-cream.png', True),
+        about_split('How we make them', 'Knitted, not printed.',
+                    'Every message is knitted into the sock, so it lasts wash after wash. Soft ribbed cuffs, reinforced '
+                    'heels and toes, and every pair checked before it leaves us.', 'pastel-blush.png', False),
+        about_values(), about_verse(), about_cta())]
 
 
 # ---------------------------------------------------------------- UAE header & footer
@@ -636,7 +725,7 @@ if __name__ == '__main__':
     os.makedirs(root, exist_ok=True)
     # Menu IDs are filled in on the server by tools/deploy.php.
     menus = {'primary': 'MENU_PRIMARY', 'shop': 'MENU_SHOP', 'help': 'MENU_HELP', 'company': 'MENU_COMPANY'}
-    for name, data in (('home', home()), ('header', header(menus['primary'])), ('footer', footer(menus))):
+    for name, data in (('home', home()), ('about', about()), ('header', header(menus['primary'])), ('footer', footer(menus))):
         with open(os.path.join(root, name + '.json'), 'w') as fh:
             json.dump(data, fh, ensure_ascii=False, separators=(',', ':'))
         print(name, len(json.dumps(data)))

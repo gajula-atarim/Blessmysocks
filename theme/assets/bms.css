@@ -557,3 +557,20 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, in
 @media (prefers-reduced-motion: reduce) {
 	.bms-track, .bms-track-r, .bms-sock { animation: none; }
 }
+
+/* ---------- About page ---------- */
+.bms-about-hero { height: clamp(420px, 62vh, 600px); background-image: linear-gradient(180deg, #C9D6E8 0%, #E3E8F0 60%, #F4F3F1 100%); }
+.bms-about-hero .elementor-background-video-container { z-index: 0; }
+.bms-about-hero > .bms-about-hero-content,
+.bms-about-hero > .e-con-inner > .bms-about-hero-content { position: relative; z-index: 2; }
+.bms-about-text .elementor-widget-text-editor p { text-wrap: pretty; }
+.bms-balance .elementor-heading-title { text-wrap: balance; }
+
+/* Current page in the header menu (About on the About page). Not on the homepage, where WordPress also
+   marks the in-page anchor links (#shop) as current. */
+@media (min-width: 768px) {
+	body:not(.home) .bms-bar .hfe-nav-menu__layout-horizontal .current-menu-item > a.hfe-menu-item {
+		color: #3D5A99 !important;
+		box-shadow: inset 0 -1px 0 #3D5A99;
+	}
+}

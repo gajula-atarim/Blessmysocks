@@ -57,10 +57,10 @@ $menu = function ( $name, $items ) {
 };
 $cat   = function ( $slug ) { return home_url( '/product-category/' . $slug . '/' ); };
 $menus = [
-	'MENU_PRIMARY' => $menu( 'BMS Primary', [ [ 'Shop', $home . '#shop' ], [ 'About', $home . '#about' ], [ 'FAQ', '#' ], [ 'Contact', '#' ] ] ),
+	'MENU_PRIMARY' => $menu( 'BMS Primary', [ [ 'Shop', $home . '#shop' ], [ 'About', home_url( '/about/' ) ], [ 'FAQ', '#' ], [ 'Contact', '#' ] ] ),
 	'MENU_SHOP'    => $menu( 'BMS Footer Shop', [ [ 'Socks', home_url( '/shop/' ) ], [ 'T-shirts', $cat( 'gifts-tees' ) ], [ 'Gifts & more', $cat( 'gifts-tees' ) ] ] ),
 	'MENU_HELP'    => $menu( 'BMS Footer Help', [ [ 'Size & fit', '#' ], [ 'Shipping', $home . '#shipping' ], [ 'Returns & exchanges', $home . '#returns' ], [ 'FAQ', '#' ], [ 'Contact', '#' ] ] ),
-	'MENU_COMPANY' => $menu( 'BMS Footer Company', [ [ 'About', $home . '#about' ], [ 'Privacy', '#' ], [ 'Terms', '#' ] ] ),
+	'MENU_COMPANY' => $menu( 'BMS Footer Company', [ [ 'About', home_url( '/about/' ) ], [ 'Privacy', '#' ], [ 'Terms', '#' ] ] ),
 ];
 $log['menus'] = $menus;
 
@@ -148,6 +148,9 @@ $hf_meta    = [ 'ehf_target_include_locations' => $everywhere, 'ehf_target_exclu
 $log['header'] = $save( 'header', [ 'post_type' => 'elementor-hf', 'post_title' => 'BMS Header' ], $json( 'header' ), $hf_meta + [ 'ehf_template_type' => 'type_header' ] );
 $log['footer'] = $save( 'footer', [ 'post_type' => 'elementor-hf', 'post_title' => 'BMS Footer' ], $json( 'footer' ), $hf_meta + [ 'ehf_template_type' => 'type_footer' ] );
 $log['home']   = $save( 'home', [ 'post_type' => 'page', 'post_title' => 'Home', 'post_name' => 'home' ], $json( 'home' ),
+	[ '_wp_page_template' => 'elementor_header_footer', '_elementor_template_type' => 'wp-page' ],
+	[ 'hide_title' => 'yes', 'template' => 'elementor_header_footer' ] );
+$log['about']  = $save( 'about', [ 'post_type' => 'page', 'post_title' => 'About', 'post_name' => 'about' ], $json( 'about' ),
 	[ '_wp_page_template' => 'elementor_header_footer', '_elementor_template_type' => 'wp-page' ],
 	[ 'hide_title' => 'yes', 'template' => 'elementor_header_footer' ] );
 update_option( 'bms_build_ids', $ids, false );
