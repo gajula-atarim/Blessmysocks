@@ -25,6 +25,8 @@ add_action( 'wp_enqueue_scripts', function () {
 			'checkout' => wc_get_checkout_url(),
 			'cart'     => wc_get_cart_url(),
 			'shop'     => wc_get_page_permalink( 'shop' ),
+			// Default size (M) for variable products, so quick "Add +" buttons add a real variation.
+			'defaults' => function_exists( 'bms_default_variations' ) ? bms_default_variations() : [],
 		] );
 	}
 }, 20 );
@@ -33,3 +35,4 @@ add_action( 'wp_enqueue_scripts', function () {
 add_filter( 'wpcf7_autop_or_not', '__return_false' );
 
 require_once get_stylesheet_directory() . '/inc/store.php';
+require_once get_stylesheet_directory() . '/inc/shop.php';

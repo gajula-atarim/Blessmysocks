@@ -3,6 +3,8 @@
  * - Cart drawer backed by the WooCommerce Store API (add, +/-, totals).
  * - "Add +" buttons (links containing ?add-to-cart=ID) add without a page load.
  * - Collection strip arrows and the delivery-region tabs.
+ * - Shop: instant range filter (All / Socks / T-shirts / Gifts & more).
+ * - Product page: photo thumbnails, size and quantity pickers, add to cart into the drawer, one panel open.
  * - FAQ: one question open at a time across all the accordion groups.
  * - Contact form: personal thank-you note and "Send another message".
  */
@@ -57,7 +59,8 @@
 				'<div class="bms-line-item__img">' + (img ? '<img src="' + img + '" alt="">' : '') + '</div>' +
 				'<div class="bms-line-item__info"><span class="bms-line-item__name"></span><span class="bms-line-item__price"></span></div>' +
 				'<div class="bms-qty"><button type="button" aria-label="Decrease">−</button><span></span><button type="button" aria-label="Increase">+</button></div>';
-			row.querySelector('.bms-line-item__name').textContent = item.name;
+			var size = (item.variation || []).filter(function (v) { return /size/i.test(v.attribute); })[0];
+			row.querySelector('.bms-line-item__name').textContent = item.name + (size ? ' · ' + size.value : '');
 			row.querySelector('.bms-line-item__price').textContent = money(item.totals.line_subtotal, item.totals);
 			row.querySelector('.bms-qty span').textContent = item.quantity;
 			var btns = row.querySelectorAll('.bms-qty button');
@@ -130,6 +133,7 @@
 				e.preventDefault();
 				var id = parseInt(new URL(add.href, location.href).searchParams.get('add-to-cart'), 10);
 				if (!id) { return; }
+				id = (cfg.defaults && cfg.defaults[id]) || id; // sized products: their default size (M)
 				add.classList.add('is-loading');
 				api('cart/add-item', 'POST', { id: id, quantity: 1 })
 					.then(function (cart) { render(cart); openDrawer(); })
@@ -138,7 +142,105 @@
 			}
 		});
 
+		// Product page: add the chosen size and quantity, then show the drawer.
+		document.addEventListener('submit', function (e) {
+			var form = e.target.closest('.bms-pdp-form');
+			if (!form) { return; }
+			e.preventDefault();
+			var vid = form.querySelector('[name="variation_id"]');
+			var id = parseInt(vid ? vid.value : form.getAttribute('data-product'), 10);
+			var qtyInput = form.querySelector('[name="quantity"]');
+			var btn = form.querySelector('.bms-pdp-add');
+			btn.classList.add('is-loading');
+			api('cart/add-item', 'POST', { id: id, quantity: Math.max(1, parseInt(qtyInput.value, 10) || 1) })
+				.then(function (cart) {
+					render(cart);
+					openDrawer();
+					qtyInput.value = 1;
+					pdpTotal(form);
+				})
+				.catch(function () { form.submit(); })
+				.then(function () { btn.classList.remove('is-loading'); });
+		});
+
 		refresh();
+	}
+
+	// Product page pickers.
+	function pdpTotal(form) {
+		var qty = Math.max(1, parseInt(form.querySelector('[name="quantity"]').value, 10) || 1);
+		var total = form.querySelector('[data-bms-total]');
+		if (total) { total.textContent = 'A$' + (parseFloat(form.getAttribute('data-price')) * qty).toFixed(2); }
+	}
+	document.addEventListener('click', function (e) {
+		var thumb = e.target.closest('.bms-pdp-thumb');
+		if (thumb) {
+			var main = document.querySelector('[data-bms-main]');
+			if (main) {
+				main.src = thumb.getAttribute('data-src');
+				main.srcset = thumb.getAttribute('data-srcset') || '';
+			}
+			document.querySelectorAll('.bms-pdp-thumb').forEach(function (t) { t.classList.toggle('is-active', t === thumb); });
+			return;
+		}
+		var size = e.target.closest('.bms-size');
+		if (size) {
+			var form = size.closest('form');
+			form.querySelectorAll('.bms-size').forEach(function (b) {
+				b.classList.toggle('is-active', b === size);
+				b.setAttribute('aria-pressed', b === size ? 'true' : 'false');
+			});
+			var vid = form.querySelector('[name="variation_id"]');
+			if (vid) {
+				vid.value = size.getAttribute('data-variation');
+				form.querySelector('[name="attribute_size"]').value = size.getAttribute('data-size');
+			}
+			var note = form.querySelector('[data-bms-size-note]');
+			if (note) { note.textContent = size.getAttribute('data-note'); }
+			return;
+		}
+		var step = e.target.closest('[data-bms-qty]');
+		if (step) {
+			var f = step.closest('form');
+			var input = f.querySelector('[name="quantity"]');
+			input.value = Math.max(1, (parseInt(input.value, 10) || 1) + parseInt(step.getAttribute('data-bms-qty'), 10));
+			pdpTotal(f);
+		}
+	});
+	document.addEventListener('input', function (e) {
+		if (e.target.matches('.bms-pdp-form [name="quantity"]')) { pdpTotal(e.target.closest('form')); }
+	});
+	// Panels (Materials & care, Fit & feel, Shipping & returns): one open at a time, opening instantly.
+	document.addEventListener('toggle', function (e) {
+		if (!e.target.matches || !e.target.matches('.bms-pdp-panel') || !e.target.open) { return; }
+		document.querySelectorAll('.bms-pdp-panel[open]').forEach(function (d) {
+			if (d !== e.target) { d.open = false; }
+		});
+	}, true);
+
+	// Shop range filter: swaps the intro copy and shows that range's cards without reloading.
+	var intro = document.querySelector('[data-bms-ranges]');
+	if (intro) {
+		var ranges = JSON.parse(intro.getAttribute('data-bms-ranges'));
+		document.addEventListener('click', function (e) {
+			var tab = e.target.closest('[data-bms-range]');
+			if (!tab || tab.tagName !== 'A') { return; }
+			e.preventDefault();
+			var key = tab.getAttribute('data-bms-range');
+			var copy = ranges[key];
+			Object.keys(copy).forEach(function (k) {
+				var el = intro.querySelector('[data-bms-copy="' + k + '"]');
+				if (el) { el.textContent = k === 'count' ? copy.count + (copy.count === 1 ? ' product' : ' products') : copy[k]; }
+			});
+			document.querySelectorAll('.bms-shop-tabs [data-bms-range]').forEach(function (t) {
+				t.classList.toggle('is-active', t === tab);
+				t.setAttribute('aria-pressed', t === tab ? 'true' : 'false');
+			});
+			document.querySelectorAll('ul.products > li[data-bms-range]').forEach(function (li) {
+				li.classList.toggle('is-hidden', key !== 'all' && li.getAttribute('data-bms-range') !== key);
+			});
+			history.replaceState(null, '', tab.href);
+		});
 	}
 
 	// Collection strips: arrow buttons scroll the strip that sits beside them.

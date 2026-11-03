@@ -54,8 +54,8 @@ def product_url(slug):
     return SITE + '/product/' + slug + '/'
 
 
-def cat_url(slug):
-    return SITE + '/product-category/' + slug + '/'
+def shop_url(rng):
+    return SITE + '/shop/?cat=' + rng
 
 
 def link(url, attrs=''):
@@ -301,14 +301,14 @@ def collection_card(eyebrow_text, accent, title, sub, hero_img, cat, items, pric
              heading(title, 28, 'h3', '300', INK, lh=1.1, size_tablet=22, size_mobile=28),
              heading(sub, 13, 'span', '400', MUTED, size_tablet=12, size_mobile=13)], g=8, padding=dims(26, 26, 0, 26),
             padding_tablet=dims(20, 18, 0, 18), padding_mobile=dims(26, 26, 0, 26)),
-        image(hero_img, 'medium_large', cat_url(cat), 'bms-ar-43', 6, _margin=dims(22, 26, 0, 26),
+        image(hero_img, 'medium_large', shop_url(cat), 'bms-ar-43', 6, _margin=dims(22, 26, 0, 26),
               _margin_tablet=dims(16, 18, 0, 18), _margin_mobile=dims(22, 26, 0, 26)),
         con([strip,
              button('←', '#', 'arrow', 13, (0, 0), 'bms-arrow bms-prev', '400'),
              button('→', '#', 'arrow', 13, (0, 0), 'bms-arrow bms-next', '400')],
             css_classes='bms-strip-wrap', position='relative'),
         row([heading(price_from, 12, 'span', '400', MUTED), heading('EXPLORE →', 12, 'span', '400', INK, ls=0.18)],
-            g=12, html_tag='a', link=link(cat_url(cat)), padding=dims(18, 26), padding_tablet=dims(16, 18),
+            g=12, html_tag='a', link=link(shop_url(cat)), padding=dims(18, 26), padding_tablet=dims(16, 18),
             padding_mobile=dims(18, 26), border_border='solid',
             border_width=dims(1, 0, 0, 0), border_color='#E4E0D9', background_background='classic',
             background_color='rgba(255,255,255,0.35)', css_classes='bms-card-foot'),
@@ -319,10 +319,10 @@ def collection_card(eyebrow_text, accent, title, sub, hero_img, cat, items, pric
 def collections():
     ev = [('cat-ev-rose.png', 'Rose', 'rose-rib-crew'), ('cat-ev-cream.png', 'Cream', 'cream-rib-crew'),
           ('cat-ev-sage.png', 'Sage', 'sage-rib-crew'), ('cat-ev-lilac.png', 'Lilac', 'lilac-rib-crew'),
-          ('cat-ev-tan.png', 'Oat', 'oat-rib-crew'), ('cat-ev-blush.png', 'Blush', 'blush-rib-crew')]
+          ('cat-ev-tan.png', 'Oat', 'oat-rib-crew'), ('cat-ev-blush.png', 'Blush', 'blush-frill-bow-crew')]
     st = [('cat-st-hearts.png', 'Hearts', 'hearts-crew'), ('cat-st-daisy.png', 'Daisy', 'daisy-crew'),
           ('cat-st-bows.png', 'Bows', 'bows-crew'), ('cat-st-flower.png', 'Flower', 'flower-crew'),
-          ('cat-st-bow.png', 'Bow Rib', 'bow-rib-crew'), ('cat-st-cherry.png', 'Cherry', 'cherry-crew')]
+          ('cat-st-cherry.png', 'Cherry', 'cherry-crew')]
     gf = [('cat-gf-tee-white.png', 'White Tee', 'white-bow-tee'), ('cat-gf-tee-rose.png', 'Rose Tee', 'rose-bow-tee'),
           ('cat-gf-tee-sage.png', 'Sage Tee', 'sage-bow-tee'), ('cat-gf-box.png', 'Gift Box', 'gift-box'),
           ('cat-gf-tote.png', 'Tote', 'tote-bag'), ('cat-gf-card.png', 'Card', 'greeting-card')]
@@ -332,11 +332,11 @@ def collections():
             align='flex-end', g=24),
         grid([
             collection_card('Comfort for every day', '#8A5A4E', 'Everyday Socks', 'Soft ribbed cotton in gentle colours.',
-                            'cat-hero-everyday.png', 'everyday-socks', ev, 'From A$20.00'),
+                            'cat-hero-everyday.png', 'socks', ev, 'From A$20.00'),
             collection_card('Fun details', '#5E7250', 'Statement Socks', 'Frilled cuffs, little prints, big joy.',
-                            'cat-hero-statement.png', 'statement-socks', st, 'From A$22.00'),
+                            'cat-hero-statement.png', 'socks', st, 'From A$22.00'),
             collection_card('Thoughtful picks', BLUE, 'Gifts &amp; Tees', 'For church, family and friends.',
-                            'cat-hero-gifts.png', 'gifts-tees', gf, 'From A$20.00'),
+                            'cat-hero-gifts.png', 'gifts', gf, 'From A$6.00'),
         ], 3, 3, 1, 20, grid_align_items='start', grid_align_items_tablet='stretch'),
     ], pad_top=SECTION_PAD, flex_gap=gap(32))
 

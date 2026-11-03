@@ -57,7 +57,7 @@ add_action( 'wp_footer', function () {
 			<div class="bms-drawer__body" data-bms-lines>
 				<div class="bms-drawer__empty">
 					<span><?php esc_html_e( 'Your cart is empty.', 'hello-elementor-child' ); ?></span>
-					<button type="button" class="bms-pill" data-bms-close><?php esc_html_e( 'Shop socks', 'hello-elementor-child' ); ?></button>
+					<a class="bms-pill" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>"><?php esc_html_e( 'Shop socks', 'hello-elementor-child' ); ?></a>
 				</div>
 			</div>
 			<div class="bms-drawer__foot">

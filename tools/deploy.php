@@ -22,7 +22,7 @@ $log = [];
 
 // 1. Child theme files.
 $dir = get_stylesheet_directory();
-foreach ( [ 'functions.php', 'inc/store.php', 'assets/bms.css', 'assets/bms.js' ] as $f ) {
+foreach ( [ 'functions.php', 'inc/store.php', 'inc/shop.php', 'woocommerce/content-product.php', 'assets/bms.css', 'assets/bms.js' ] as $f ) {
 	wp_mkdir_p( dirname( "$dir/$f" ) );
 	file_put_contents( "$dir/$f", $get( "theme/$f" ) );
 	// Without this, OPcache can keep serving the previous PHP until it revalidates.
@@ -31,6 +31,9 @@ foreach ( [ 'functions.php', 'inc/store.php', 'assets/bms.css', 'assets/bms.js' 
 	}
 }
 $log['theme'] = 'ok';
+
+// 1a. Product catalogue (names, prices, sizes, photos) to match the Shop and Product designs.
+eval( '?>' . $get( 'tools/catalog.php' ) );
 
 // 1b. Contact Form 7 (the Contact page form), installed from wordpress.org if missing.
 if ( ! file_exists( WP_PLUGIN_DIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
@@ -136,10 +139,11 @@ $menu = function ( $name, $items ) {
 	return $id;
 };
 $faq   = home_url( '/faq/' );
+$shop  = wc_get_page_permalink( 'shop' );
 $cat   = function ( $slug ) { return home_url( '/product-category/' . $slug . '/' ); };
 $menus = [
-	'MENU_PRIMARY' => $menu( 'BMS Primary', [ [ 'Shop', $home . '#shop' ], [ 'About', 'page:about' ], [ 'FAQ', 'page:faq' ], [ 'Contact', 'page:contact' ] ] ),
-	'MENU_SHOP'    => $menu( 'BMS Footer Shop', [ [ 'Socks', home_url( '/shop/' ) ], [ 'T-shirts', $cat( 'gifts-tees' ) ], [ 'Gifts & more', $cat( 'gifts-tees' ) ], [ 'Shop all', home_url( '/shop/' ) ] ] ),
+	'MENU_PRIMARY' => $menu( 'BMS Primary', [ [ 'Shop', 'page:shop' ], [ 'About', 'page:about' ], [ 'FAQ', 'page:faq' ], [ 'Contact', 'page:contact' ] ] ),
+	'MENU_SHOP'    => $menu( 'BMS Footer Shop', [ [ 'Socks', $shop . '?cat=socks' ], [ 'T-shirts', $shop . '?cat=tees' ], [ 'Gifts & more', $shop . '?cat=gifts' ], [ 'Shop all', 'page:shop' ] ] ),
 	'MENU_HELP'    => $menu( 'BMS Footer Help', [ [ 'Size & fit', $faq . '#size' ], [ 'Materials & care', $faq . '#materials' ], [ 'Shipping', $faq . '#shipping' ], [ 'Returns & exchanges', $faq . '#returns' ], [ 'FAQ', $faq . '#faq' ], [ 'Contact', 'page:contact' ] ] ),
 	'MENU_COMPANY' => $menu( 'BMS Footer Company', [ [ 'About', 'page:about' ], [ 'Contact us', 'page:contact' ], [ 'Privacy', '#' ], [ 'Terms', '#' ] ] ),
 ];
