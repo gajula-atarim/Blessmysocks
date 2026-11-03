@@ -561,6 +561,8 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, in
 /* ---------- About page ---------- */
 .bms-about-hero { height: clamp(420px, 62vh, 600px); background-image: linear-gradient(180deg, #C9D6E8 0%, #E3E8F0 60%, #F4F3F1 100%); }
 .bms-about-hero .elementor-background-video-container { z-index: 0; }
+/* Keep the fade (the container's Background Overlay, editable in Elementor) above the video. */
+.bms-about-hero::before { z-index: 1 !important; }
 .bms-about-hero > .bms-about-hero-content,
 .bms-about-hero > .e-con-inner > .bms-about-hero-content { position: relative; z-index: 2; }
 .bms-about-text .elementor-widget-text-editor p { text-wrap: pretty; }
